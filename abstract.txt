@@ -1,0 +1,5 @@
+This project focuses on developing an interactive Battleship game using object-oriented programming (OOP) concepts in Python. The game will be played against a computer-controlled AI opponent and will include a menu system where users can select difficulty levels, view records, and manage user information.
+
+The implementation will utilize classes and objects to represent essential game components such as the board and player, ensuring a modular and maintainable code structure. The AI opponent will follow a simple strategy to create an engaging challenge for players. Additionally, ASCII art will enhance the visual experience, making the game more immersive.
+
+Our goal is to create an efficient, well-structured, and interactive game that demonstrates fundamental OOP principles while remaining simple and enjoyable for students.
