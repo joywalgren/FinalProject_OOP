@@ -3,6 +3,7 @@ package "Battleship Game" {
     [Game] --> [Player]
     [Game] --> [AI]
     [Player] --> [Board]
+    [Player] <-- [AI]
     [Board] --> [Cell]
     [Board] --> [Ship]
 }
