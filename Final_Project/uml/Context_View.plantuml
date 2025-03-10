@@ -1,6 +1,7 @@
 @startuml Context_View
 actor Player
-actor AI
+actor AI 
+rectangle "Game" as Game
 usecase "Start Game"
 usecase "Place Ships"
 usecase "Attack"
@@ -10,7 +11,9 @@ usecase "Check Win"
 Player --> "Start Game"
 Player --> "Place Ships"
 Player --> "Attack"
+Player --> Game
 Game --> "Receive Attack"
 Game --> "Check Win"
 AI --> "Attack"
+AI --> Game
 @enduml

@@ -1,9 +1,13 @@
 @startuml Physical_View
-node "Player Device" {
-    component "Game UI"
+node "Local Machine" {
+    node "Game" {
+        component "UI"
+        component "Game Logic"
+        component "AI Logic"
+    }
 }
-node "Server" {
-    component "Game Logic"
-}
-"Game UI" --> "Game Logic"
+
+UI --> "Game Logic"
+"Game Logic" --> "AI Logic"
+
 @enduml
