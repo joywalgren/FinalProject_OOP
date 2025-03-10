@@ -1,0 +1,9 @@
+@startuml Physical_View
+node "Player Device" {
+    component "Game UI"
+}
+node "Server" {
+    component "Game Logic"
+}
+"Game UI" --> "Game Logic"
+@enduml

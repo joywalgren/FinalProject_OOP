@@ -1,0 +1,16 @@
+@startuml Context_View
+actor Player
+actor AI
+usecase "Start Game"
+usecase "Place Ships"
+usecase "Attack"
+usecase "Receive Attack"
+usecase "Check Win"
+
+Player --> "Start Game"
+Player --> "Place Ships"
+Player --> "Attack"
+Game --> "Receive Attack"
+Game --> "Check Win"
+AI --> "Attack"
+@enduml

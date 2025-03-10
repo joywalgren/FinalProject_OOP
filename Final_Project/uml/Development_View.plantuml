@@ -1,0 +1,9 @@
+@startuml Development_View
+package "Battleship Game" {
+    [Game] --> [Player]
+    [Game] --> [AI]
+    [Player] --> [Board]
+    [Board] --> [Cell]
+    [Board] --> [Ship]
+}
+@enduml

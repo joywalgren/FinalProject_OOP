@@ -1,0 +1,11 @@
+@startuml Process_View
+actor Player
+participant Game
+participant Board
+
+Player -> Game: startGame()
+Game -> Board: placeShips()
+Player -> Game: attack(x, y)
+Game -> Board: receiveAttack(x, y)
+Board -> Player: hit/miss
+@enduml

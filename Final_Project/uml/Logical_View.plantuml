@@ -1,0 +1,43 @@
+@startuml Logical_View
+class Cell {
+    - hasShip: bool
+    - isHit: bool
+    - grid: tuple[int, int]
+}
+
+class Ship {
+    - size: int
+    - hits: int
+    + isSunk(): bool
+}
+
+class Board {
+    - grid: Cell[][]
+    + printBoard(): void
+    + placeShip(ship: Ship, x: int, y: int, horizontal: bool): bool
+    + receiveAttack(x: int, y: int): bool
+}
+
+class Player {
+    - profile: dict
+    - board: Board
+    + attack(x: int, y: int): bool
+}
+
+class AI {
+    + attackLogic(): tuple[int, int]
+}
+
+class Game {
+    + startGame(): void
+    + endGame(): void
+    + checkWin(): bool
+}
+
+AI --|> Player
+Board *-- Cell
+Board *-- Ship
+Player *-- Board
+Game *-- Player
+Game *-- AI
+@enduml
