@@ -1,5 +1,5 @@
 import random
-
+from player import Player
 
 class Board(object):
     def __init__(self) -> None:
@@ -83,6 +83,7 @@ def attack(tboard: Board, enemy_board: Board, x, y):
             print("invalid action")
 
 
+Player.get_name()
 def read_input() -> tuple:
     """
     reads the input from the user
