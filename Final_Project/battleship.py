@@ -89,7 +89,7 @@ def read_input() -> tuple:
     """
     x, y = input("Enter a letter then a number seperated by a space then press Enter\n").split()
     x = ord(x.upper()) - ord('A')
-    y = int(y)
+    y = int(y) - 1
     return x, y
 
 
@@ -101,7 +101,7 @@ bottom_board.place_ships()
 top_board.print_board()
 bottom_board.print_board()
 user_input = read_input()
-attack(top_board, bottom_board, user_input[0], user_input[1])
+attack(top_board, bottom_board, user_input[1], user_input[0])
 
 # while True:
 #     attack(top_board, bottom_board, user_input[0], user_input[1])
