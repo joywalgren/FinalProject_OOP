@@ -32,7 +32,7 @@ class Attack:
         # 1) Is there a ship at (x,y)?
         if (self.x, self.y) in board._ship_positions:
             ship = board._ship_positions[(self.x, self.y)]
-            board.set_cell(self.x, self.y, "X")
+            board.set_cell(self.x, self.y, "H")
 
             # 2) Tell the ship it was hit *at* (x,y)
             was_hit = ship.is_hit(self.x, self.y)
@@ -50,7 +50,7 @@ class Attack:
         
         # 5) Miss
         else:
-            board.set_cell(self.x, self.y, "O")
+            board.set_cell(self.x, self.y, "M")
             self.result = "Miss!"
         
         return self.result
@@ -69,17 +69,20 @@ class Player:
         return name
 
 class Board(object):
-    def __init__(self) -> None:
+    def __init__(self, size=10) -> None:
         """set up board class"""
-        self._ships = []  # list to hold actual Ship instances
+        self._board_size = size
+        ship_sizes = [5, 4, 3, 3, 2]
+        #self._ships = []  # list to hold actual Ship instances
+        self._ships = []
         self._ship_positions: dict[tuple[int,int], Ship] = {}
-        board = [['~' for _ in range(10)] for _ in range(10)]
-        ship_sizes = [2]
-        self._board = board
+        #board = [['~' for _ in range(10)] for _ in range(10)]
+        #self._board = board
+        self._board = [[Cell(x, y) for x in range(self._board_size)] for y in range(self._board_size)]
+
         self._ship_sizes = ship_sizes
 
     def place_ships(self) -> None:
-        coordinates = []
         for ship_size in self._ship_sizes:
             while True:
                 loc_fit = random.randint(0, 9 - ship_size + 1)
@@ -98,23 +101,15 @@ class Board(object):
             self._ships.append(ship)
 
             for x, y in coords:
-                self._board[x][y] = "~"  # still looks empty, or use str(ship_size) for testing
+                self._board[x][y].place_ship(ship)  # still looks empty, or use str(ship_size) for testing
                 self._ship_positions[(x, y)] = ship
 
     def ship_space_free(self, length, orient, loc_fit, loc) -> bool:
-        is_free: bool = True
-        if orient == 0:
-            for i in range(length):
-                is_free = (self._board[loc][loc_fit+i]) == '~'
-                if is_free is False:
-                    break
-            return is_free
-        if orient == 1:
-            for i in range(length):
-                is_free = (self._board[loc_fit+i][loc]) == '~'
-                if is_free is False:
-                    break
-            return is_free
+        """Checks if the space for the ship is free"""
+        if orient == 0:  # Horizontal
+            return all(self._board[loc][loc_fit + i].get_cell() == '~' for i in range(length))
+        else:  # Vertical
+            return all(self._board[loc_fit + i][loc].get_cell() == '~' for i in range(length))
         
     @property
     def board(self) -> list:
@@ -122,34 +117,33 @@ class Board(object):
         returns the board
         """
         return self._board
-    
-    def get_cell(self, x: int, y: int) -> str:
-        """
-        returns what's in the cell
-        """
-        return self._board[x][y]
- 
-    def set_cell(self, x: int, y: int, marker: str) -> None:
-        """
-        sets a piece of the board to a value
-        """
-        self._board[x][y] = marker
 
     def has_ship(self, x: int, y: int) -> bool:
         return self._board[x][y].isdigit()
+    
+    def get_cell(self, x: int, y: int) -> str:
+    # returns "~", "S", "H", or "M"
+        return self._board[x][y].get_cell()
+
+    def set_cell(self, x: int, y: int, marker: str) -> None:
+        # delegates to Cell.set_cell(...)
+        self._board[x][y].set_cell(marker)
 
     def print_board(self, show_ships: bool = False) -> None:
         print("    A B C D E F G H I J")
         print("   ---------------------")
         for i, row in enumerate(self._board):
-            display_row = []
+            display_row: list[str] = []
             for j, cell in enumerate(row):
-                if show_ships and (i, j) in self._ship_positions:
-                    display_row.append("S")
+                if (i, j) in self._ship_positions:
+                    # if there's a ship here...
+                    if show_ships:
+                        display_row.append("S")
+                    else:
+                        display_row.append("~")
                 else:
-                    display_row.append(cell)
-            # Row numbers are 1–10
-            print(f"{i+1:2}| {' '.join(display_row)} |")
+                    display_row.append(cell.get_cell())
+            print(f"{i+1:2} | {' '.join(display_row)} |")
         print("   ---------------------")
 
     def all_ships_sunk(self) -> bool:
@@ -171,3 +165,42 @@ class IsWon:
         Returns True if every Ship on the board reports is_sunk().
         """
         return self._board.all_ships_sunk()
+    
+class Cell:
+    def __init__(self, x: int, y: int):
+        self._x = x
+        self._y = y
+        self._cell = "~"  # starts off as water/empty
+        self._ship = None  # Reference to a Ship object if present
+
+    def get_cell(self):
+        """Returns H = hit, M = miss, S = ship, ~ = water"""
+        return self._cell
+
+    def set_cell(self, marker: str) -> None:
+        """Sets a piece of the board to a value"""
+        if marker in ['H', 'M', 'S', '~']:
+            self._cell = marker
+        else:
+            print("Invalid Marker")
+
+    def has_ship(self) -> bool:
+        """Checks if the cell contains a ship"""
+        return self._ship is not None
+
+    def place_ship(self, ship):
+        """Places a ship in the cell"""
+        self._ship = ship  # uses loose coupling
+        self._cell = 'S'
+
+    def hit(self) -> bool:
+        """Marks the cell as hit and updates the ship if present."""
+        # print(f"Attacking cell ({self._x}, {self._y}): Current state = {self._cell}")
+        if self._cell == 'S':
+            self._cell = 'H'
+            self._ship.is_hit()
+            return True  # yes it hit
+        elif self._cell == '~':
+            self._cell = 'M'
+        return False
+

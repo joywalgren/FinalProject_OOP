@@ -17,8 +17,10 @@ class PlayGame():
             opponent = players[(turn + 1) % 2]
 
             print(f"\n{current.name}'s Turn")
-            current.board.print_board(show_ships=True) #reveal ships
-            Board.print_board(current.board)
+            #Board.print_board(player1.board)
+            player2.board.print_board(show_ships = False) #hide ships
+            player1.board.print_board(show_ships=True) #reveal ships
+
 
             try:
                 coords = input("Enter a letter then a number seperated by a space! then press Enter:\n").split()
