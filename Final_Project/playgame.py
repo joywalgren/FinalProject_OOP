@@ -29,7 +29,7 @@ class PlayGame():
                 x, y = coords
                 x = ord(x.upper()) - ord('A')
                 y = int(y) -1
-                print (x,y, " YES")
+                #print (x,y, " YES")
                 if not (0 <= x < 10 and 0 <= y < 10):
                     raise ValueError
             except (ValueError, IndexError):
