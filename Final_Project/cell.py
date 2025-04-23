@@ -6,8 +6,13 @@ class Cell:
         self._ship = None  # Reference to a Ship object if present
 
     def get_cell(self):
-        """Returns H = hit, M = miss, S = ship, ~ = water"""
-        return self._cell
+        """Returns display character: H = hit, M = miss, S = ship (colored), ~ = water"""
+        if self._cell in ['H', 'M', '~']:
+            return self._cell
+        elif self._ship:
+            return self._ship.get_symbol()
+        else:
+            return self._cell
 
     def set_cell(self, marker: str) -> None:
         """Sets a piece of the board to a value"""
@@ -23,7 +28,7 @@ class Cell:
     def place_ship(self, ship):
         """Places a ship in the cell"""
         self._ship = ship  # uses loose coupling
-        self._cell = 'S'
+        self._cell = ''
 
     def hit(self) -> bool:
         """Marks the cell as hit and updates the ship if present."""

@@ -8,5 +8,5 @@ class Player():
         print("Hello ",name,"! Are you ready to play?")
 
     def get_difficulty() -> str:
-        diff = input("What difficulty would you like to play on? ")
+        diff = input("What difficulty would you like to play on? 'h' for Hard 'e' for Easy\n ")
         return diff

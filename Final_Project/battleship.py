@@ -44,7 +44,7 @@ dumb_ai.place_ships()
 
 bottom_board.place_ships()
 
-if difficulty == "hard":
+if difficulty == "h":
     player_turn = True
 
     while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
