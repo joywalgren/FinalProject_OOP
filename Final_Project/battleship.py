@@ -16,6 +16,7 @@ def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
 
 
 Player.get_name()
+Player.get_difficulty()
 
 
 def read_input() -> tuple:
