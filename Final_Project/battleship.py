@@ -33,11 +33,11 @@ def read_input() -> tuple:
 
 top_board = Board()
 bottom_board = Board()
-#for smart ai
+# for smart ai
 ai = Opponent()
 ai.place_ships()
 
-#for dumb
+# for dumb
 dumb_ai = Opponent()
 dumb_ai.place_ships()
 
@@ -72,7 +72,7 @@ if difficulty == "h":
         else:
 
             print("\n--- AI's Turn ---")
-            hit = ai.attack_player(bottom_board)  
+            hit = ai.attack_player(bottom_board)
             if not hit:
                 player_turn = True  # Give player the turn
 
@@ -107,14 +107,9 @@ else:
         else:
 
             print("\n--- AI's Turn ---")
-            hit = dumb_ai.attack_player(bottom_board)  
+            hit = dumb_ai.attack_player(bottom_board)
             if not hit:
                 player_turn = True  # Give player the turn
 
             if bottom_board.check_endgame():
                 print("AI wins!")
-
-
-
-    
-

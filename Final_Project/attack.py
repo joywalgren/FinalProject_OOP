@@ -1,8 +1,8 @@
 """
 attack.py"""
 
-import random
-from cell import Cell
+# import random
+# from cell import Cell
 from board import Board
 
 # class Ship:
@@ -24,6 +24,7 @@ from board import Board
 
 # attack.py
 
+
 class Attack:
     def __init__(self, x: int, y: int) -> None:
         self.x = x
@@ -44,7 +45,8 @@ class Attack:
                 ship = cell._ship  # ship reference is stored in cell
                 self.result = "You sank a ship!" if ship.is_sunk() else "Hit!"
             else:
-                self.result = "Already Attacked"  # In case ship was already hit (redundant guard)
+                self.result = "Already Attacked"  # In case ship was already hit
+                                                    #(redundant guard)
         else:
             cell.hit()  # will mark it as a miss
             self.result = "Miss!"
@@ -66,36 +68,35 @@ class Attack:
 
 #             # 2) Tell the ship it was hit *at* (x,y)
 #             was_hit = ship.is_hit(self.x, self.y)
-            
+
 #             # 3) Based on whether it sank or just hit:
 #             if was_hit:
 #                 self.result = "You sank a ship!" if ship.is_sunk() else "Hit!"
 #             else:
 #                 # (optional) if you want to catch repeat-hits here:
 #                 self.result = "Already Attacked"
-        
+
 #         # 4) Already attacked this spot?
 #         elif board.get_cell(self.x, self.y) in ("X", "O"):
 #             self.result = "Already Attacked"
-        
+
 #         # 5) Miss
 #         else:
 #             board.set_cell(self.x, self.y, "M")
 #             self.result = "Miss!"
-        
-#         return self.result
-  
 
-    
+#         return self.result
+
+
 class Player:
     def __init__(self, name: str):
         self.name = name
         self.board = Board()
         self.board.place_ships()
 
-    def get_name(self)-> str:
+    def get_name(self) -> str:
         name = input("Hello! Welcome to our Battleship Game! What is your name? ")
-        print("Hello ",name,"! Are you ready to play?")
+        print("Hello ", name, "! Are you ready to play?")
         return name
 
 # class Board(object):
@@ -108,7 +109,8 @@ class Player:
 #         self._ship_positions: dict[tuple[int,int], Ship] = {}
 #         #board = [['~' for _ in range(10)] for _ in range(10)]
 #         #self._board = board
-#         self._board = [[Cell(x, y) for x in range(self._board_size)] for y in range(self._board_size)]
+#         self._board = [[Cell(x, y) for x in range(self._board_size)] for y in
+#                           range(self._board_size)]
 
 #         self._ship_sizes = ship_sizes
 
@@ -131,7 +133,8 @@ class Player:
 #             self._ships.append(ship)
 
 #             for x, y in coords:
-#                 self._board[x][y].place_ship(ship)  # still looks empty, or use str(ship_size) for testing
+#                 self._board[x][y].place_ship(ship)  # still looks empty, or use str
+#                                                       (ship_size) for testing
 #                 self._ship_positions[(x, y)] = ship
 
 #     def ship_space_free(self, length, orient, loc_fit, loc) -> bool:
@@ -140,7 +143,7 @@ class Player:
 #             return all(self._board[loc][loc_fit + i].get_cell() == '~' for i in range(length))
 #         else:  # Vertical
 #             return all(self._board[loc_fit + i][loc].get_cell() == '~' for i in range(length))
-        
+
 #     @property
 #     def board(self) -> list:
 #         """
@@ -150,7 +153,7 @@ class Player:
 
 #     def has_ship(self, x: int, y: int) -> bool:
 #         return self._board[x][y].isdigit()
-    
+
 #     def get_cell(self, x: int, y: int) -> str:
 #     # returns "~", "S", "H", or "M"
 #         return self._board[x][y].get_cell()
@@ -195,7 +198,7 @@ class Player:
 #         Returns True if every Ship on the board reports is_sunk().
 #         """
 #         return self._board.all_ships_sunk()
-    
+
 # class Cell:
 #     def __init__(self, x: int, y: int):
 #         self._x = x
@@ -233,4 +236,3 @@ class Player:
 #         elif self._cell == '~':
 #             self._cell = 'M'
 #         return False
-

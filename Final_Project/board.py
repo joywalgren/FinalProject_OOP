@@ -9,7 +9,8 @@ class Board:
     def __init__(self, size=10) -> None:
         """Set up board class"""
         self._board_size = size
-        self._board = [[Cell(x, y) for x in range(self._board_size)] for y in range(self._board_size)]
+        self._board = [[Cell(x, y) for x in range(self._board_size)]
+                       for y in range(self._board_size)]
         ship_sizes = [5, 4, 3, 3, 2]
         self._ships = [Ship(size) for size in ship_sizes]
 
@@ -20,7 +21,8 @@ class Board:
                 loc_fit = random.randint(0, self._board_size - ship.get_size())
                 loc = random.randint(0, self._board_size - 1)
                 orient = random.randint(0, 1)
-                # print(f"Placing ship of size {ship.get_size()} at ({loc_fit}, {loc}) with orientation {'Horizontal' if orient == 0 else 'Vertical'}")
+                # print(f"Placing ship of size {ship.get_size()} at ({loc_fit},
+                #       {loc}) with orientation {'Horizontal' if orient == 0 else 'Vertical'}")
                 if self.ship_space_free(ship.get_size(), orient, loc_fit, loc):
                     if orient == 0:  # Horizontal
                         for i in range(ship.get_size()):

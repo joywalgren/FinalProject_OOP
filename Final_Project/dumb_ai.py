@@ -2,6 +2,7 @@ from board import Board
 from attack import Attack
 import random
 
+
 class Opponent:
     def __init__(self) -> None:
         self.top_board = Board()      # AI's view of player’s board (marks H/M)
@@ -13,12 +14,10 @@ class Opponent:
     def place_ships(self) -> None:
         self.bottom_board.place_ships()
 
-
     def choose_move(self):
 
-
         # Hunt mode: random untried cell
-    
+
         random.shuffle(self.available_moves)  # This ensures random order every time
 
         for move in self.available_moves:
@@ -27,9 +26,6 @@ class Opponent:
 
         return None  # No moves left
 
-    
-
-    
     def attack_player(self, player_board):
         move = self.choose_move()
         if move is None:
@@ -56,4 +52,3 @@ class Opponent:
         else:
             # Already Attacked – should not happen if choose_move avoids it
             return False
-
