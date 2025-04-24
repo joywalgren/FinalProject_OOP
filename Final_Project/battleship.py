@@ -39,7 +39,7 @@ def game(win, lose):
         ai = Opponent()
     else:
         ai = DumbOpponent()
-    ai.place_ships()
+    # ai.place_ships()
 
     #placeships
     ai.bottom_board.print_board()
