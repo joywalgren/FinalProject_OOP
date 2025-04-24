@@ -75,13 +75,13 @@ if option == 1: #option play game
                     break
             else:
 
-            print("\n--- AI's Turn ---")
-            hit = ai.attack_player(bottom_board)  
-            if not hit:
-                player_turn = True  # Give player the turn
+                print("\n--- AI's Turn ---")
+                hit = ai.attack_player(bottom_board)  
+                if not hit:
+                    player_turn = True  # Give player the turn
 
-                if bottom_board.check_endgame():
-                    print("AI wins!")
+                    if bottom_board.check_endgame():
+                        print("AI wins!")
 
     else:
         player_turn = True
@@ -108,15 +108,15 @@ if option == 1: #option play game
                 if dumb_ai.bottom_board.check_endgame():
                     print("You win!")
                     break
+
             else:
+                print("\n--- AI's Turn ---")
+                hit = dumb_ai.attack_player(bottom_board)  
+                if not hit:
+                    player_turn = True  # Give player the turn
 
-            print("\n--- AI's Turn ---")
-            hit = dumb_ai.attack_player(bottom_board)  
-            if not hit:
-                player_turn = True  # Give player the turn
-
-            if bottom_board.check_endgame():
-                print("AI wins!")
+                if bottom_board.check_endgame():
+                    print("AI wins!")
 
 
 
