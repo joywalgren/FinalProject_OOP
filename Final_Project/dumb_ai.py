@@ -3,7 +3,7 @@ from attack import Attack
 import random
 
 
-class Opponent:
+class DumbOpponent:
     def __init__(self) -> None:
         self.top_board = Board()      # AI's view of player’s board (marks H/M)
         self.bottom_board = Board()   # AI’s own board with ships
