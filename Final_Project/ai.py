@@ -2,17 +2,15 @@ from board import Board
 from attack import Attack
 import random
 
+
 class Opponent:
     def __init__(self) -> None:
         self.top_board = Board()      # AI's view of player’s board (marks H/M)
         self.bottom_board = Board()   # AI’s own board with ships
+        self.bottom_board.place_ships()
         self.available_moves = [(x, y) for x in range(10) for y in range(10)]
         self.target_stack = []
         self.tried = set()
-
-    def place_ships(self) -> None:
-        self.bottom_board.place_ships()
-
 
     def choose_move(self):
 

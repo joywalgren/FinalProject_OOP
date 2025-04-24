@@ -10,6 +10,7 @@
 
 Still need to do
 - menu
+- store player data
 - win loss count
 - check edge case 
 - 2 other design methods
