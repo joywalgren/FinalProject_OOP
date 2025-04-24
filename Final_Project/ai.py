@@ -1,14 +1,8 @@
-from board import Board
 from attack import Attack
-import random
+from dumb_ai import Dumb_Opponent
 
-class Opponent:
-    def __init__(self) -> None:
-        self.top_board = Board()      # AI's view of player’s board (marks H/M)
-        self.bottom_board = Board()   # AI’s own board with ships
-        self.available_moves = [(x, y) for x in range(10) for y in range(10)]
-        self.target_stack = []
-        self.tried = set()
+
+class Opponent(Dumb_Opponent):
 
     def place_ships(self) -> None:
         self.bottom_board.place_ships()
@@ -21,50 +15,27 @@ class Opponent:
             if move not in self.tried:
                 return move
 
-        # Hunt mode: random untried cell
-    
-        random.shuffle(self.available_moves)  # This ensures random order every time
+        # Hunt mode: random untried cell calls base class
+        move = super().choose_move()
+        return move  # will either be None or a tuple (prob need to fix that)
 
-        for move in self.available_moves:
-            if move not in self.tried:
-                return move
-
-        return None  # No moves left
-    
     def add_adjacent_targets(self, x, y):
         potential_targets = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
         for tx, ty in potential_targets:
             if 0 <= tx < 10 and 0 <= ty < 10:
                 if (tx, ty) not in self.tried and (tx, ty) not in self.target_stack:
                     self.target_stack.append((tx, ty))
-    
 
-    
     def attack_player(self, player_board):
-        move = self.choose_move()
-        if move is None:
-            print("AI has no moves left.")
-            return False
+        # Call the dumb_ai attack_player method
+        hit = super().attack_player(player_board)
 
-        x, y = move
-        self.tried.add((x, y))
-        self.available_moves.remove((x, y))
-
-        print(f"AI attacks at {chr(x + ord('A'))}{y + 1}")
-
-        attack = Attack(x, y)
-        result = attack.execute(player_board)
-
-        print("AI result:", result)
-
-        if result in ["Hit!", "You sank a ship!"]:
-            self.top_board._board[y][x].set_cell('H')
+        # If the attack was a hit, add adjacent targets
+        if hit:
+            # Get the last move made by the AI
+            last_move = list(self.tried)[-1]  # The most recent move added to `self.tried`
+            x, y = last_move
             self.add_adjacent_targets(x, y)
-            return True
-        elif result == "Miss!":
-            self.top_board._board[y][x].set_cell('M')
-            return False
-        else:
-            # Already Attacked – should not happen if choose_move avoids it
-            return False
+
+        return hit  # will still be the true or false from the base class
 

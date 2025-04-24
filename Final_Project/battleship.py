@@ -2,6 +2,7 @@ from player import Player
 from board import Board
 from ai import Opponent
 from dumb_ai import Opponent
+from menu import Menu
 
 
 def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
@@ -35,17 +36,18 @@ top_board = Board()
 bottom_board = Board()
 #for smart ai
 ai = Opponent()
-ai.place_ships()
+# ai.place_ships()
 
 #for dumb
-dumb_ai = Opponent()
-dumb_ai.place_ships()
+dumb_ai = Dumb_Opponent()
+# dumb_ai.place_ships()
 
 
 bottom_board.place_ships()
 
-if difficulty == "hard":
-    player_turn = True
+if option == 1: #option play game 
+    if difficulty == "h":
+        player_turn = True
 
     while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
         print("Your Top Board:")
