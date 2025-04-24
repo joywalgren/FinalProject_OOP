@@ -2,6 +2,7 @@ from player import Player
 from board import Board
 from ai import Opponent
 from dumb_ai import Opponent
+from menu import Menu
 
 
 def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
@@ -16,8 +17,10 @@ def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
         player_top_board._board[y][x].set_cell('M')  # update top board
 
 
+option = Menu.menu()
 Player.get_name()
 difficulty = Player.get_difficulty()
+
 
 
 def read_input() -> tuple:
@@ -44,75 +47,76 @@ dumb_ai.place_ships()
 
 bottom_board.place_ships()
 
-if difficulty == "hard":
-    player_turn = True
+if option == 1: #option play game 
+    if difficulty == "hard":
+        player_turn = True
 
-    while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
-        print("Your Top Board:")
-        top_board.print_board()
-        print("Your Bottom Board (Ships):")
-        bottom_board.print_board()
+        while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
+            print("Your Top Board:")
+            top_board.print_board()
+            print("Your Bottom Board (Ships):")
+            bottom_board.print_board()
 
-        if player_turn:
-            print("\n--- Your Turn ---")
-            x, y = read_input()
-            hit = ai.bottom_board.attack(x, y)
+            if player_turn:
+                print("\n--- Your Turn ---")
+                x, y = read_input()
+                hit = ai.bottom_board.attack(x, y)
 
-            if hit:
-                print("Hit!")
-                top_board._board[y][x].set_cell('H')
+                if hit:
+                    print("Hit!")
+                    top_board._board[y][x].set_cell('H')
+                else:
+                    print("Miss!")
+                    top_board._board[y][x].set_cell('M')
+                    player_turn = False  # Give AI the turn
+
+                if ai.bottom_board.check_endgame():
+                    print("You win!")
+                    break
             else:
-                print("Miss!")
-                top_board._board[y][x].set_cell('M')
-                player_turn = False  # Give AI the turn
 
-            if ai.bottom_board.check_endgame():
-                print("You win!")
-                break
-        else:
+                print("\n--- AI's Turn ---")
+                hit = ai.attack_player(bottom_board)  
+                if not hit:
+                    player_turn = True  # Give player the turn
 
-            print("\n--- AI's Turn ---")
-            hit = ai.attack_player(bottom_board)  
-            if not hit:
-                player_turn = True  # Give player the turn
+                if bottom_board.check_endgame():
+                    print("AI wins!")
 
-            if bottom_board.check_endgame():
-                print("AI wins!")
+    else:
+        player_turn = True
 
-else:
-    player_turn = True
+        while not bottom_board.check_endgame() and not dumb_ai.bottom_board.check_endgame():
+            print("Your Top Board:")
+            top_board.print_board()
+            print("Your Bottom Board (Ships):")
+            bottom_board.print_board()
 
-    while not bottom_board.check_endgame() and not dumb_ai.bottom_board.check_endgame():
-        print("Your Top Board:")
-        top_board.print_board()
-        print("Your Bottom Board (Ships):")
-        bottom_board.print_board()
+            if player_turn:
+                print("\n--- Your Turn ---")
+                x, y = read_input()
+                hit = dumb_ai.bottom_board.attack(x, y)
 
-        if player_turn:
-            print("\n--- Your Turn ---")
-            x, y = read_input()
-            hit = dumb_ai.bottom_board.attack(x, y)
+                if hit:
+                    print("Hit!")
+                    top_board._board[y][x].set_cell('H')
+                else:
+                    print("Miss!")
+                    top_board._board[y][x].set_cell('M')
+                    player_turn = False  # Give AI the turn
 
-            if hit:
-                print("Hit!")
-                top_board._board[y][x].set_cell('H')
+                if dumb_ai.bottom_board.check_endgame():
+                    print("You win!")
+                    break
             else:
-                print("Miss!")
-                top_board._board[y][x].set_cell('M')
-                player_turn = False  # Give AI the turn
 
-            if dumb_ai.bottom_board.check_endgame():
-                print("You win!")
-                break
-        else:
+                print("\n--- AI's Turn ---")
+                hit = dumb_ai.attack_player(bottom_board)  
+                if not hit:
+                    player_turn = True  # Give player the turn
 
-            print("\n--- AI's Turn ---")
-            hit = dumb_ai.attack_player(bottom_board)  
-            if not hit:
-                player_turn = True  # Give player the turn
-
-            if bottom_board.check_endgame():
-                print("AI wins!")
+                if bottom_board.check_endgame():
+                    print("AI wins!")
 
 
 
