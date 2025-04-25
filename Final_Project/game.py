@@ -105,7 +105,7 @@ class Main(object):
                         if bottom_board.check_endgame():
                             print("AI wins!")
                             self._losses += 1
-                            break  # or break if you're inside a bigger loop
+                            return  # or break if you're inside a bigger loop
 
                         if not hit:
                             player_turn = True  # End AI's turn
