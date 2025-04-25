@@ -114,18 +114,6 @@ class Cell:
         return False
 
 
-
-class Player:
-    def __init__(self, name: str):
-        self.name = name
-        self.board = Board()
-        self.board.place_ships()
-
-    def get_name(self) -> str:
-        name = input("Hello! Welcome to our Battleship Game! What is your name? ")
-        print("Hello ", name, "! Are you ready to play?")
-        return name
-
 class Board:
     """The class that handles displaying and updating the game board"""
 
@@ -234,7 +222,7 @@ class DumbOpponent:
             # Already Attacked – should not happen if choose_move avoids it
             return False
         
-class Opponent(Dumb_Opponent):
+class Opponent(DumbOpponent):
 
     def choose_move(self):
 
@@ -269,6 +257,7 @@ class Opponent(Dumb_Opponent):
 
 
 class Menu():
+    @staticmethod
     def menu() -> int:
         option = int(input("Battleship\n" \
         "1) Play game\n" \
@@ -281,10 +270,12 @@ class Player():
         name = " "
         self._name = name
 
+    @staticmethod
     def get_name() -> str:
         name = input("Hello! Welcome to our Battleship Game! What is your name? ")
         print("Hello ", name, "! Are you ready to play?")
 
+    @staticmethod
     def get_difficulty() -> str:
         diff = input("What difficulty would you like to play on? 'h' for Hard 'e' for Easy\n ")
         return diff
@@ -334,3 +325,46 @@ class TargetedStrategy(AIStrategy):
                 if 0 <= tx < 10 and 0 <= ty < 10:
                     if (tx, ty) not in ai.tried and (tx, ty) not in ai.target_stack:
                         ai.target_stack.append((tx, ty))
+
+from board import Board
+from attack import Attack
+
+class AIPlayer:
+    def __init__(self, strategy):
+        self.top_board = Board()
+        self.bottom_board = Board()
+        self.bottom_board.place_ships()
+        self.available_moves = [(x, y) for x in range(10) for y in range(10)]
+        self.target_stack = []
+        self.tried = set()
+        self.strategy = strategy
+
+    def choose_move(self):
+        return self.strategy.choose_move(self)
+
+    def attack_player(self, player_board):
+        move = self.choose_move()
+        if move is None:
+            print("AI has no moves left.")
+            return False
+
+        x, y = move
+        self.tried.add(move)
+        if move in self.available_moves:
+            self.available_moves.remove(move)
+
+        print(f"AI attacks at {chr(x + ord('A'))}{y + 1}")
+        attack = Attack(x, y)
+        result = attack.execute(player_board)
+        print("AI result:", result)
+
+        # Update the top board
+        if result in ["Hit!", "You sank a ship!"]:
+            self.top_board._board[y][x].set_cell('H')
+        elif result == "Miss!":
+            self.top_board._board[y][x].set_cell('M')
+
+        # Let the strategy react
+        self.strategy.handle_result(self, move, result)
+        return result in ["Hit!", "You sank a ship!"]
+

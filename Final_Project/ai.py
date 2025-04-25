@@ -1,8 +1,8 @@
 from attack import Attack
-from dumb_ai import Dumb_Opponent
+from dumb_ai import DumbOpponent
 
 
-class Opponent(Dumb_Opponent):
+class Opponent(DumbOpponent):
 
     def choose_move(self):
 
