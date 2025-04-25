@@ -11,19 +11,6 @@ from opponent import AIPlayer'''
 
 from attack import *
 
-'''
-def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
-    """
-    Handles an attack on the enemy board and updates the player's top board.
-    """
-    if enemy_board.attack(x, y):  # Check if the attack hits a ship
-        print("Hit!")
-        player_top_board._board[y][x].set_cell('H')  # update top board
-    else:
-        print("Miss!")
-        player_top_board._board[y][x].set_cell('M')  # update top board
-'''
-
 def read_input() -> tuple:
     """
     reads the input from the user
