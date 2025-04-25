@@ -12,6 +12,7 @@ from menu import Menu
 from dumb_strategy import DumbStrategy
 from smart_strategy import TargetedStrategy
 from opponent import AIPlayer
+from attack import Attack
 
 
 class Main(object):
@@ -79,23 +80,26 @@ class Main(object):
                     while True:
                         x, y = self.read_input()
                         try:
-                            hit = ai.bottom_board.attack(x, y)
-                            break  # Exit loop on successful attack
+                            attack = Attack(x, y)
+                            result = attack.execute(ai.bottom_board)
+                            print(result)
+
+                            if result in ["Hit!", "You sank a ship!"]:
+                                top_board._board[y][x].set_cell('H')
+                            elif result == "Miss!":
+                                top_board._board[y][x].set_cell('M')
+
+                            if ai.bottom_board.check_endgame():
+                                print("You win!")
+                                self._wins += 1
+                                return  # return to main() for play again
+
+                            if result != "Hit!":  # Only switch if not a hit
+                                player_turn = False
+
+                            break  # exit input loop if valid attack
                         except ValueError as e:
-                            print(e)  # e.g., "This square has already been attacked!"
-
-                    if hit:
-                        print("Hit!")
-                        top_board._board[y][x].set_cell('H')
-                    else:
-                        print("Miss!")
-                        top_board._board[y][x].set_cell('M')
-                        player_turn = False  # Switch to AI
-
-                    if ai.bottom_board.check_endgame():
-                        print("You win!")
-                        self._wins += 1
-                        return
+                            print(e)
 
                 else:
                     print("\n--- AI's Turn ---")

@@ -31,11 +31,11 @@ class AIPlayer:
         print("AI result:", result)
 
         # Update the top board
-        if result in ["Hit!", "You sank a ship!"]:
+        if result in ["Hit!", "AI sank a ship!"]:
             self.top_board._board[y][x].set_cell('H')
         elif result == "Miss!":
             self.top_board._board[y][x].set_cell('M')
 
         # Let the strategy react
         self.strategy.handle_result(self, move, result)
-        return result in ["Hit!", "You sank a ship!"]
+        return result in ["Hit!", "AI sank a ship!"]

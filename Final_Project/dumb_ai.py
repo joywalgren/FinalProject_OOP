@@ -42,7 +42,7 @@ class DumbOpponent:
 
         print("AI result:", result)
 
-        if result in ["Hit!", "You sank a ship!"]:
+        if result in ["Hit!", "AI sank a ship!"]:
             self.top_board._board[y][x].set_cell('H')
             return True
         elif result == "Miss!":

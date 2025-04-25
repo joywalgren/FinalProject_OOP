@@ -10,7 +10,7 @@ class TargetedStrategy(AIStrategy):
         return DumbStrategy().choose_move(ai)
 
     def handle_result(self, ai, move, result):
-        if result in ["Hit!", "You sank a ship!"]:
+        if result in ["Hit!", "AI sank a ship!"]:
             x, y = move
             potential_targets = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
             for tx, ty in potential_targets:
