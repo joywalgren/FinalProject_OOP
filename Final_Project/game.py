@@ -26,10 +26,7 @@ class Main(object):
         Main._instance = self
         self._top_board = Board()
         self._bottom_board = Board()
-        self._wins = 0
-        self._losses = 0
-        Player.get_name()
-
+        self._player = Player()
 
     def read_input(self) -> tuple:
         """
@@ -51,72 +48,75 @@ class Main(object):
             except ValueError:
                 print("Invalid input format.")
 
-    def loop(self):
-        keep_playing = True
-        top_board = Board()
-        bottom_board = Board()
+    def player_turn(self, ai: AIPlayer) -> bool:
+        """Handles all the interactions with the player on their turn"""
+        print("\n--- Your Turn ---")
+        while True:
+            print("Your Top Board:")
+            self._top_board.print_board()
+            print("Your Bottom Board (Ships):")
+            self._bottom_board.print_board()
+            x, y = self.read_input()
+            try:
+                attack = Attack(x, y)
+                result = attack.execute(ai.bottom_board)
+                print(result)
 
+                if result in ["Hit!", "You sank a ship!"]:
+                    self._top_board._board[y][x].set_cell('H')
+                    if ai.bottom_board.check_endgame():
+                        break
+                    continue
+                elif result == "Miss!":
+                    self._top_board._board[y][x].set_cell('M')
+
+                if result == "Miss!":
+                    return False  # set player turn to false
+                elif result == "Already Attacked":
+                    print("You already tried that spot. Try again.")
+                    continue  # go back to input without breaking the loop
+
+                break  # exit input loop if valid attack
+            except ValueError as e:
+                print(e)
+
+    def ai_turn(self, ai: AIPlayer) -> bool:
+        """Handles the ai's turn"""
+        print("\n--- AI's Turn ---")
+        while True:
+            hit = ai.attack_player(self._bottom_board)
+
+            if not hit:
+                return True  # Turns player turn to true
+
+    def loop(self):
+        """The main game loop"""
         if self._difficulty == 'h':
             ai = AIPlayer(TargetedStrategy())
         else:
             ai = AIPlayer(DumbStrategy())
 
-
-        #placeships
+        # placeships
         ai.bottom_board.print_board()
-        bottom_board.place_ships()
+        self._bottom_board.place_ships()
 
-        player_turn = True 
-        
-        while keep_playing:
-            while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
-                print("Your Top Board:")
-                top_board.print_board()
-                print("Your Bottom Board (Ships):")
-                bottom_board.print_board()
+        player_turn = True
 
-                if player_turn:
-                    print("\n--- Your Turn ---")
-                    while True:
-                        x, y = self.read_input()
-                        try:
-                            attack = Attack(x, y)
-                            result = attack.execute(ai.bottom_board)
-                            print(result)
+        while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
+            if player_turn:
+                player_turn = self.player_turn(ai)
 
-                            if result in ["Hit!", "You sank a ship!"]:
-                                top_board._board[y][x].set_cell('H')
-                            elif result == "Miss!":
-                                top_board._board[y][x].set_cell('M')
+            else:
+                player_turn = self.ai_turn(ai)
 
-                            if ai.bottom_board.check_endgame():
-                                print("You win!")
-                                self._wins += 1
-                                return  # return to main() for play again
-
-                            if result == "Miss!":
-                                player_turn = False
-                            elif result == "Already Attacked":
-                                print("You already tried that spot. Try again.")
-                                continue  # go back to input without breaking the loop
-
-                            break  # exit input loop if valid attack
-                        except ValueError as e:
-                            print(e)
-
-                else:
-                    print("\n--- AI's Turn ---")
-                    while True:
-                        hit = ai.attack_player(bottom_board)
-
-                        if bottom_board.check_endgame():
-                            print("AI wins!")
-                            self._losses += 1
-                            return  # or break if you're inside a bigger loop
-
-                        if not hit:
-                            player_turn = True  # End AI's turn
-                            break  # Exit the AI's mini-loop
+        if ai.bottom_board.check_endgame():
+            print("You win!")
+            self._player.update_player_stats(1, 0)  # Add 1 win
+            return
+        else:
+            print("You lose :(")
+            self._player.update_player_stats(0, 1)  # Add 1 loss
+            return
 
     @classmethod
     def get_instance(cls) -> Main:
@@ -143,14 +143,17 @@ class Main(object):
             option = Menu.menu()
             if option == 1:
                 manager._difficulty = Player.get_difficulty()
+                manager._bottom_board.clean_board()
+                manager._top_board.clean_board()
                 manager.loop()
-                print(f"Score: You: {manager._wins}, AI: {manager._losses}")
                 again = input("Play again? (y/n): ")
                 if again.lower() != 'y':
                     break
             else:
-                print(f"Total Score: You : {manager._wins}, AI: {manager._losses}")
+                manager._player.display_player_stats()  # Display the player's stats
                 break
+        # save data to file before exiting
+        manager._player.save_dict_to_file("data.txt", manager._player._data_dict)
 
 
 if __name__ == "__main__":
