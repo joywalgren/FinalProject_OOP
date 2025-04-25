@@ -33,7 +33,7 @@ class Cell:
     def hit(self) -> bool:
         """Marks the cell as hit and updates the ship if present."""
         # print(f"Attacking cell ({self._x}, {self._y}): Current state = {self._cell}")
-        if self._cell == 'S':
+        if self._ship and self._cell != 'H':
             self._cell = 'H'
             self._ship.is_hit()
             return True  # yes it hit

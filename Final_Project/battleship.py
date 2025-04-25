@@ -1,9 +1,13 @@
 from player import Player
 from board import Board
-from ai import Opponent
-from dumb_ai import DumbOpponent
+#from ai import Opponent
+#from dumb_ai import DumbOpponent
 from menu import Menu
 from attack import Attack
+
+from dumb_strategy import DumbStrategy
+from smart_strategy import TargetedStrategy
+from opponent import AIPlayer
 
 '''
 def attack(player_top_board: Board, enemy_board: Board, x: int, y: int):
@@ -34,18 +38,25 @@ def game(win, lose):
     top_board = Board()
     bottom_board = Board()
 
-    if difficulty =='h':
-    # for smart ai
-        ai = Opponent()
-    else:
-        ai = DumbOpponent()
+    # if difficulty =='h':
+    # # for smart ai
+    #     ai = Opponent()
+    # else:
+    #     ai = DumbOpponent()
     # ai.place_ships()
+
+    if difficulty == 'h':
+        ai = AIPlayer(TargetedStrategy())
+    else:
+        ai = AIPlayer(DumbStrategy())
+
 
     #placeships
     ai.bottom_board.print_board()
     bottom_board.place_ships()
 
-
+    player_turn = True 
+    
     while keep_playing:
             while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
                 print("Your Top Board:")
@@ -56,7 +67,7 @@ def game(win, lose):
                 if player_turn:
                     print("\n--- Your Turn ---")
                     x, y = read_input()
-                    attack = attack()
+                    #attack = attack()
                     hit = ai.bottom_board.attack(x, y)
 
                     if hit:
@@ -81,6 +92,9 @@ def game(win, lose):
                         if bottom_board.check_endgame():
                             win+=0
                             print("AI wins!")
+                            # print("AI wins!") this is what chat thinks it should be
+                            # lose += 1
+                            # break
 
 
 option = Menu.menu()
