@@ -1,4 +1,7 @@
-# dumb_strategy.py
+'''
+A class using the strategy design pattern that is used for the easy level of the game
+
+'''
 import random
 from ai_strategy import AIStrategy
 

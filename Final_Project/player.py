@@ -1,3 +1,7 @@
+'''
+Player class to keep track of player stats
+'''
+
 from collections import defaultdict
 
 
@@ -10,12 +14,14 @@ class Player():
 
     @staticmethod
     def get_name() -> str:
+        '''Get and save the name from the player'''
         name = input("Hello! Welcome to our Battleship Game! What is your name? ")
         print("Hello ", name, "! Are you ready to play?")
         return name
 
     @staticmethod
     def get_difficulty() -> str:
+        '''Get and save the difficulty level from the player'''
         diff = input("What difficulty would you like to play on? 'h' for Hard 'e' for Easy\n ")
         return diff
 

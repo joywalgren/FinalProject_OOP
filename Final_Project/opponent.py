@@ -1,3 +1,7 @@
+'''
+The main class for the AI opponent
+'''
+
 from board import Board
 from attack import Attack
 
