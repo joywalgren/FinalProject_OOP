@@ -94,8 +94,11 @@ class Main(object):
                                 self._wins += 1
                                 return  # return to main() for play again
 
-                            if result != "Hit!":  # Only switch if not a hit
+                            if result == "Miss!":
                                 player_turn = False
+                            elif result == "Already Attacked":
+                                print("You already tried that spot. Try again.")
+                                continue  # go back to input without breaking the loop
 
                             break  # exit input loop if valid attack
                         except ValueError as e:
