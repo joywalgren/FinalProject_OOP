@@ -40,13 +40,6 @@ def game(win, lose):
     top_board = Board()
     bottom_board = Board()
 
-    # if difficulty =='h':
-    # # for smart ai
-    #     ai = Opponent()
-    # else:
-    #     ai = DumbOpponent()
-    # ai.place_ships()
-
     if difficulty == 'h':
         ai = AIPlayer(TargetedStrategy())
     else:
@@ -82,6 +75,7 @@ def game(win, lose):
                 if ai.bottom_board.check_endgame():
                     print("You win!")
                     win += 1
+                    return win, lose
                     break
 
             else:
@@ -89,13 +83,10 @@ def game(win, lose):
                 while True:
                     hit = ai.attack_player(bottom_board)
 
-                    print("Your board after AI's move:")
-                    bottom_board.print_board()
-
                     if bottom_board.check_endgame():
                         print("AI wins!")
                         lose += 1
-                        return  # or break if you're inside a bigger loop
+                        return win, lose # or break if you're inside a bigger loop
 
                     if not hit:
                         player_turn = True  # End AI's turn
@@ -104,6 +95,14 @@ def game(win, lose):
 
 if __name__ == "__main__":
     win, lose = 0, 0
-    option = Menu.menu()
-    if option == 1:
-        game(win, lose)
+    while True:
+        option = Menu.menu()
+        if option == 1:
+            win, lose = game(win, lose)
+            print(f"Score: You: {win}, AI: {lose}")
+            again = input("Play again? (y/n): ")
+            if again.lower() != 'y':
+                break
+        else:
+            print("Goodbye!")
+            break

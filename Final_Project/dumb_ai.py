@@ -2,8 +2,6 @@ from board import Board
 from attack import Attack
 import random
 
-
-
 class DumbOpponent:
     def __init__(self) -> None:
         self.top_board = Board()      # AI's view of player’s board (marks H/M)

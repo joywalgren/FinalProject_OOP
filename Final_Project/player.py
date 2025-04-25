@@ -8,6 +8,7 @@ class Player():
         name = input("Hello! Welcome to our Battleship Game! What is your name? ")
         print("Hello ", name, "! Are you ready to play?")
 
+    @staticmethod
     def get_difficulty() -> str:
         diff = input("What difficulty would you like to play on? 'h' for Hard 'e' for Easy\n ")
         return diff

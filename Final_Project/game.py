@@ -20,20 +20,15 @@ class Main(object):
     _instance = None
 
     def __init__(self) -> None:
-        """Constructor - uses singleton pattern"""
         if Main._instance:
-            raise NameError(
-                "Cannot create multiple instances of a singleton class Main"
-            )
+            raise NameError("Cannot create multiple instances of a singleton class Main")
         Main._instance = self
         self._top_board = Board()
         self._bottom_board = Board()
-        Player.get_name()  # asks players name
-        option = Menu.menu()
-        # should give the option to either play or look at how many wins/losses
-        self._difficulty = Player.get_difficulty()  # easy or hard
-        if option == 1:
-            self.loop(self._difficulty)  # calls the game loop
+        self._wins = 0
+        self._losses = 0
+        Player.get_name()
+
 
     def read_input(self) -> tuple:
         """
@@ -55,56 +50,66 @@ class Main(object):
             except ValueError:
                 print("Invalid input format.")
 
-    def loop(self, difficulty: str) -> None:
-        """The game loop"""
-        self._bottom_board.place_ships()
-        if difficulty == 'h':
+    def loop(self):
+        keep_playing = True
+        top_board = Board()
+        bottom_board = Board()
+
+        if self._difficulty == 'h':
             ai = AIPlayer(TargetedStrategy())
         else:
             ai = AIPlayer(DumbStrategy())
 
-        player_turn = True
-        while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
-            print("Your Top Board:")
-            self._top_board.print_board()
-            print("Your Bottom Board (Ships):")
-            self._bottom_board.print_board()
-            # print("AI Bottom Board (Ships):")
-            # ai.bottom_board.print_board()
 
-            if player_turn:
-                print("\n--- Your Turn ---")
-                x, y = self.read_input()
-                hit = ai.bottom_board.attack(x, y)
+        #placeships
+        ai.bottom_board.print_board()
+        bottom_board.place_ships()
 
-                if hit:
-                    print("Hit!")
-                    self._top_board._board[y][x].set_cell('H')
+        player_turn = True 
+        
+        while keep_playing:
+            while not bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
+                print("Your Top Board:")
+                top_board.print_board()
+                print("Your Bottom Board (Ships):")
+                bottom_board.print_board()
+
+                if player_turn:
+                    print("\n--- Your Turn ---")
+                    while True:
+                        x, y = self.read_input()
+                        try:
+                            hit = ai.bottom_board.attack(x, y)
+                            break  # Exit loop on successful attack
+                        except ValueError as e:
+                            print(e)  # e.g., "This square has already been attacked!"
+
+                    if hit:
+                        print("Hit!")
+                        top_board._board[y][x].set_cell('H')
+                    else:
+                        print("Miss!")
+                        top_board._board[y][x].set_cell('M')
+                        player_turn = False  # Switch to AI
+
+                    if ai.bottom_board.check_endgame():
+                        print("You win!")
+                        self._wins += 1
+                        return
+
                 else:
-                    print("Miss!")
-                    self._top_board._board[y][x].set_cell('M')
-                    player_turn = False  # Give AI the turn
+                    print("\n--- AI's Turn ---")
+                    while True:
+                        hit = ai.attack_player(bottom_board)
 
-            else:
-                print("\n--- AI's Turn ---")
-                hit = ai.attack_player(self._bottom_board)
-                if not hit:
-                    player_turn = True  # Give player the turn
+                        if bottom_board.check_endgame():
+                            print("AI wins!")
+                            self._losses += 1
+                            break  # or break if you're inside a bigger loop
 
-        if ai.bottom_board.check_endgame():
-            print("You win!")
-            # win+=1
-        else:
-            print("You Lost :(")
-            # lose+=1
-        play_again: str = 'a'
-        while play_again not in ['y', 'n', 'Y', 'N']:
-            play_again = input("Would you like to play again? y/n\n")
-        if play_again in ['y', 'Y']:
-            self._bottom_board.clean_board()
-            ai.bottom_board.clean_board()
-            self._difficulty = Player.get_difficulty()
-            self.loop(self._difficulty)
+                        if not hit:
+                            player_turn = True  # End AI's turn
+                            break  # Exit the AI's mini-loop
 
     @classmethod
     def get_instance(cls) -> Main:
@@ -126,8 +131,20 @@ class Main(object):
     @staticmethod
     def main() -> None:
         """Main static method."""
-        Main.get_instance()
+        manager = Main.get_instance()
+        while True:
+            option = Menu.menu()
+            if option == 1:
+                manager._difficulty = Player.get_difficulty()
+                manager.loop()
+                print(f"Score: You: {manager._wins}, AI: {manager._losses}")
+                again = input("Play again? (y/n): ")
+                if again.lower() != 'y':
+                    break
+            else:
+                print(f"Total Score: You : {manager._wins}, AI: {manager._losses}")
+                break
 
 
-if __name__ == '__main__':
-    Main.main()  # pragma: no cover
+if __name__ == "__main__":
+    Main.main()

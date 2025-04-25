@@ -11,7 +11,7 @@ class Board:
         self._board_size = size
         self._board = [[Cell(x, y) for x in range(self._board_size)]
                        for y in range(self._board_size)]
-        ship_sizes = [5]  # 4, 3, 3, 2
+        ship_sizes = [5] #4, 3, 3, 2
         self._ships = [Ship(size) for size in ship_sizes]
 
     def place_ships(self) -> None:
@@ -41,8 +41,11 @@ class Board:
             return all(self._board[loc_fit + i][loc].get_cell() == '~' for i in range(length))
 
     def attack(self, x: int, y: int) -> bool:
-        """Handles an attack on the board returns"""
-        return self._board[y][x].hit()
+        """Handles an attack on the board. Returns True if hit, False if miss. Raises ValueError if already attacked."""
+        cell = self._board[y][x]
+        if cell.get_cell() in ['H', 'M']:
+            raise ValueError("This square has already been attacked! Try again.")
+        return cell.hit()
 
     def print_board(self) -> None:
         """Prints the board"""
@@ -58,7 +61,6 @@ class Board:
             if not ship.is_sunk():
                 return False
         return True
-
     def clean_board(self) -> None:
         """Resets the board by setting all cells to water (~)"""
         self._board = [[Cell(x, y) for x in range(self._board_size)]

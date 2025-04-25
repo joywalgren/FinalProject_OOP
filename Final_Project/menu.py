@@ -1,6 +1,13 @@
 class Menu():
+    @staticmethod
     def menu() -> int:
-        option = int(input("Battleship\n" \
-        "1) Play game\n" \
-        "2) See file log \n"))
-        return option
+        while True:
+            try:
+                option = int(input("Battleship\n1) Play game\n2) See file log\n"))
+                if option in [1, 2]:
+                    return option
+                else:
+                    print("Invalid option. Please enter valid input.")
+            except ValueError:
+                print("Invalid input. Please enter a number valid input.")
+    

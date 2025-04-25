@@ -7,7 +7,35 @@ from board import Board
 
 # from cell import Cell
 
+class Attack:
+    def __init__(self, x: int, y: int) -> None:
+        self.x = x
+        self.y = y
+        self.result = None
 
+    def execute(self, board) -> str:
+        cell = board._board[self.y][self.x]
+
+        current = cell.get_cell()
+        if current in ("H", "M"):
+            self.result = "Already Attacked"
+            return self.result
+
+        if cell.has_ship():
+            hit_result = cell.hit()  # this handles updating the cell and ship
+            if hit_result:
+                ship = cell._ship  # ship reference is stored in cell
+                self.result = "You sank a ship!" if ship.is_sunk() else "Hit!"
+            else:
+                self.result = "Already Attacked"  # In case ship was already hit
+                                                    #(redundant guard)
+        else:
+            cell.hit()  # will mark it as a miss
+            self.result = "Miss!"
+
+        return self.result
+    
+'''    
 class Ship:
     _color_cycle = [
         '\033[91mS\033[0m',
@@ -152,8 +180,11 @@ class Board:
             return all(self._board[loc_fit + i][loc].get_cell() == '~' for i in range(length))
 
     def attack(self, x: int, y: int) -> bool:
-        """Handles an attack on the board returns"""
-        return self._board[y][x].hit()
+        """Handles an attack on the board. Returns True if hit, False if miss. Raises ValueError if already attacked."""
+        cell = self._board[y][x]
+        if cell.get_cell() in ['H', 'M']:
+            raise ValueError("This square has already been attacked! Try again.")
+        return cell.hit()
 
     def print_board(self) -> None:
         """Prints the board"""
@@ -259,10 +290,15 @@ class Opponent(DumbOpponent):
 class Menu():
     @staticmethod
     def menu() -> int:
-        option = int(input("Battleship\n" \
-        "1) Play game\n" \
-        "2) See file log \n"))
-        return option
+        while True:
+            try:
+                option = int(input("Battleship\n1) Play game\n2) See file log\n"))
+                if option in [1, 2]:
+                    return option
+                else:
+                    print("Invalid option. Please enter valid input.")
+            except ValueError:
+                print("Invalid input. Please enter a number valid input.")
     
 
 class Player():
@@ -279,17 +315,6 @@ class Player():
     def get_difficulty() -> str:
         diff = input("What difficulty would you like to play on? 'h' for Hard 'e' for Easy\n ")
         return diff
-    
-from abc import ABC, abstractmethod
-
-class AIStrategy(ABC):
-    @abstractmethod
-    def choose_move(self, ai) -> tuple:
-        pass
-
-    @abstractmethod
-    def handle_result(self, ai, move, result) -> None:
-        pass
 
 # dumb_strategy.py
 import random
@@ -368,3 +393,4 @@ class AIPlayer:
         self.strategy.handle_result(self, move, result)
         return result in ["Hit!", "You sank a ship!"]
 
+'''
