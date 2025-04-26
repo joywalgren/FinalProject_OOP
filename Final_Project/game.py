@@ -14,6 +14,12 @@ from smart_strategy import TargetedStrategy
 from opponent import AIPlayer
 from attack import Attack
 
+# decorator imports
+from attack import BasicAttack
+from attack_validation import ValidationAttack
+from attack_logging import LoggingAttack
+from attack_stats import StatsAttack
+
 
 class Main(object):
     """Singleton class Main"""
@@ -57,28 +63,34 @@ class Main(object):
             print("Your Bottom Board (Ships):")
             self._bottom_board.print_board()
             x, y = self.read_input()
-            try:
-                attack = Attack(x, y)
-                result = attack.execute(ai.bottom_board)
-                print(result)
 
-                if result in ["Hit!", "You sank a ship!"]:
-                    self._top_board._board[y][x].set_cell('H')
-                    if ai.bottom_board.check_endgame():
-                        break
-                    continue
-                elif result == "Miss!":
-                    self._top_board._board[y][x].set_cell('M')
+            # Build decorator chain
+            attack_obj = ValidationAttack(
+                StatsAttack(
+                    LoggingAttack(
+                        BasicAttack(x, y)
+                    )
+                )
+            )
+            result = attack_obj.execute(ai.bottom_board)
+            print(result)
 
-                if result == "Miss!":
-                    return False  # set player turn to false
-                elif result == "Already Attacked":
-                    print("You already tried that spot. Try again.")
-                    continue  # go back to input without breaking the loop
+            # Update top board view
+            if result in ["Hit!", "You sank a ship!"]:
+                self._top_board._board[y][x].set_cell('H')
+                if ai.bottom_board.check_endgame():
+                    break
+                continue  # allow another attack on hit
 
-                break  # exit input loop if valid attack
-            except ValueError as e:
-                print(e)
+            if result == "Miss!":
+                self._top_board._board[y][x].set_cell('M')
+                return False  # switch to AI turn
+
+            if result in ["Already Attacked", "Invalid: Repeat Attack"]:
+                print("You already tried that spot. Try again.")
+                continue
+
+            break
 
     def ai_turn(self, ai: AIPlayer) -> bool:
         """Handles the ai's turn"""
@@ -105,18 +117,19 @@ class Main(object):
         while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
             if player_turn:
                 player_turn = self.player_turn(ai)
-
+            
             else:
                 player_turn = self.ai_turn(ai)
 
         if ai.bottom_board.check_endgame():
             print("You win!")
             self._player.update_player_stats(1, 0)  # Add 1 win
-            return
+        
         else:
             print("You lose :(")
             self._player.update_player_stats(0, 1)  # Add 1 loss
-            return
+        # display stats and log summary
+        StatsAttack.report()
 
     @classmethod
     def get_instance(cls) -> Main:

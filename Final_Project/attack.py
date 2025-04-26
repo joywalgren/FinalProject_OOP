@@ -1,5 +1,25 @@
+# File: basic_attack.py
+from attack_interface import AttackStrategy
+
+class BasicAttack(AttackStrategy):
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    def execute(self, board) -> str:
+        cell = board._board[self.y][self.x]
+        current = cell.get_cell()
+        if current in ("H", "M"):
+            return "Already Attacked"
+        if cell.has_ship():
+            sunk = cell.hit()
+            return "You sank a ship!" if sunk else "Hit!"
+        else:
+            cell.hit()
+            return "Miss!"
+
 """
-attack.py"""
+attack.py
 
 # import random
 # from cell import Cell
@@ -34,4 +54,4 @@ class Attack:
             self.result = "Miss!"
 
         return self.result
-    
+    """
