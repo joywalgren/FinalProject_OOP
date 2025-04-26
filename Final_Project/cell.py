@@ -1,5 +1,15 @@
+"""Cell
+Author: Joy Walgren
+Date: 4/16/2025
+The class that handles the cells on the board.
+Uses loose coupling to talk with ship
+"""
+
+
 class Cell:
+    """Keeps track of each cell on the board"""
     def __init__(self, x: int, y: int):
+        """initializes the cell"""
         self._x = x
         self._y = y
         self._cell = "~"  # starts off as water/empty
@@ -32,7 +42,6 @@ class Cell:
 
     def hit(self) -> bool:
         """Marks the cell as hit and updates the ship if present."""
-        # print(f"Attacking cell ({self._x}, {self._y}): Current state = {self._cell}")
         if self._ship and self._cell != 'H':
             self._cell = 'H'
             self._ship.is_hit()

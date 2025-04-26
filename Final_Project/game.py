@@ -1,5 +1,5 @@
 """Game
-Author: Joy Walgren
+Primary Author: Joy Walgren
 Date: 4/24/2025
 The manager class for battleship
 using the singleton pattern.
