@@ -100,22 +100,22 @@ class Main(object):
                 return True  # Turns player turn to true
 
     def loop(self):
+        #new boards
+        self._top_board    = Board()
+        self._bottom_board = Board()
+        self._bottom_board.place_ships()
+
         """The main game loop"""
         if self._difficulty == 'h':
             ai = AIPlayer(TargetedStrategy())
         else:
             ai = AIPlayer(DumbStrategy())
 
-        # placeships
-        ai.bottom_board.print_board()
-        self._bottom_board.place_ships()
-
         player_turn = True
 
-        while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
+        while (not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame()):
             if player_turn:
                 player_turn = self.player_turn(ai)
-            
             else:
                 player_turn = self.ai_turn(ai)
 
@@ -157,9 +157,7 @@ class Main(object):
             option = Menu.menu()
             if option == 1:
                 manager._difficulty = Player.get_difficulty()
-                manager._bottom_board.clean_board()
-                manager._top_board.clean_board()
-                
+
                 manager.loop()
                 again = input("Play again? (y/n): ")
                 if again.lower() != 'y':

@@ -55,3 +55,14 @@ class AIPlayer:
         # Let the strategy react
         self.strategy.handle_result(self, move, result)
         return result in ["Hit!", "AI sank a ship!"]
+    
+    def reset(self):
+        # wipe and re-place ships on both boards
+        self.top_board.clean_board()
+        self.bottom_board.clean_board()
+        self.bottom_board.place_ships()
+
+        # reset your move trackers
+        self.available_moves = [(x, y) for x in range(10) for y in range(10)]
+        self.tried           = set()
+        self.target_stack    = []
