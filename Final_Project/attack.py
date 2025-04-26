@@ -11,12 +11,17 @@ class BasicAttack(AttackStrategy):
         current = cell.get_cell()
         if current in ("H", "M"):
             return "Already Attacked"
+        
         if cell.has_ship():
-            sunk = cell.hit()
-            return "You sank a ship!" if sunk else "Hit!"
-        else:
             cell.hit()
-            return "Miss!"
+            ship = cell._ship
+            if ship.is_sunk():
+                return "Ship Sank!!"
+            else:
+                return "Hit!"
+        else:
+                cell.hit()
+                return "Miss!"
 
 """
 attack.py

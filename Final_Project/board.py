@@ -21,6 +21,7 @@ class Board:
                        for y in range(self._board_size)]
         ship_sizes = [5]  # 4, 3, 3, 2
         self._ships = [Ship(size) for size in ship_sizes]
+        self.clean_board
 
     def place_ships(self) -> None:
         """Randomly places ships"""
@@ -72,7 +73,14 @@ class Board:
                 return False
         return True
 
-    def clean_board(self) -> None:
-        """Resets the board by setting all cells to water (~)"""
-        self._board = [[Cell(x, y) for x in range(self._board_size)]
-                       for y in range(self._board_size)]
+    def clean_board(self):
+        from cell import Cell
+        self._board = [
+            [Cell(x,y) for x in range(self._board_size)]
+            for y in range(self._board_size)
+        ]
+
+    def cleann_board(self):
+        """Clear out all ships and hits; back to fresh state."""
+        self._make_empty_board()
+        self.place_ships()

@@ -12,8 +12,6 @@ from menu import Menu
 from dumb_strategy import DumbStrategy
 from smart_strategy import TargetedStrategy
 from opponent import AIPlayer
-from attack import Attack
-
 # decorator imports
 from attack import BasicAttack
 from attack_validation import ValidationAttack
@@ -73,7 +71,7 @@ class Main(object):
                 )
             )
             result = attack_obj.execute(ai.bottom_board)
-            print(result)
+            #print(result)
 
             # Update top board view
             if result in ["Hit!", "You sank a ship!"]:
@@ -152,18 +150,26 @@ class Main(object):
     def main() -> None:
         """Main static method."""
         manager = Main.get_instance()
+
+        open("data.txt", "w").close()
+
         while True:
             option = Menu.menu()
             if option == 1:
                 manager._difficulty = Player.get_difficulty()
                 manager._bottom_board.clean_board()
                 manager._top_board.clean_board()
+                
                 manager.loop()
                 again = input("Play again? (y/n): ")
                 if again.lower() != 'y':
                     break
-            else:
+            elif option == 2:
                 manager._player.display_player_stats()  # Display the player's stats
+                input("\nPress Enter to return to menu…")
+            elif option == 3:
+                break
+            else: 
                 break
         # save data to file before exiting
         manager._player.save_dict_to_file("data.txt", manager._player._data_dict)
