@@ -1,4 +1,5 @@
 '''
+By: McKenzie Swindler
 A class using the strategy design pattern that is used for the hard level of the game
 
 '''

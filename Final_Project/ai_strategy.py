@@ -1,4 +1,5 @@
 '''
+By: McKenzie Swindler
 Base class for strategy design pattern for the opponent
 '''
 from abc import ABC, abstractmethod

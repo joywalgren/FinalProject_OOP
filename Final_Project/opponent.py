@@ -1,4 +1,5 @@
 '''
+By: McKenzie Swindler
 The main class for the AI opponent
 '''
 
