@@ -1,7 +1,11 @@
-# from cell import Cell
+"""Attack 
+Author: Mykaela Moore
+Date: 4/28/2025
+Ship logic and attributes. """
 
 
 class Ship:
+    """The designs of the ship"""
     _color_cycle = [
         '\033[91mS\033[0m',
         '\033[92mS\033[0m',
@@ -30,4 +34,5 @@ class Ship:
         return self.hits >= self.size
 
     def get_symbol(self) -> str:
+        """Each time a ship is placed it will be a different color."""
         return self.symbol

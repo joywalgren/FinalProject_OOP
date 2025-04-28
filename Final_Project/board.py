@@ -74,13 +74,10 @@ class Board:
         return True
 
     def clean_board(self):
+        """Cleans the boards of attacks and ships for a new state"""
         from cell import Cell
         self._board = [
             [Cell(x,y) for x in range(self._board_size)]
             for y in range(self._board_size)
         ]
 
-    def cleann_board(self):
-        """Clear out all ships and hits; back to fresh state."""
-        self._make_empty_board()
-        self.place_ships()

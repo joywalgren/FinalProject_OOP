@@ -1,4 +1,9 @@
-# File: attack_decorator.py
+"""Attack Decorator
+Author: Mykaela Moore
+Date: 4/28/2025
+The class that used to decorate original attack class
+"""
+
 from attack_interface import AttackStrategy
 
 class AttackDecorator(AttackStrategy):
