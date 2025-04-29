@@ -6,6 +6,7 @@ A class using the strategy design pattern that is used for the easy level of the
 import random
 from ai_strategy import AIStrategy
 
+
 class DumbStrategy(AIStrategy):
     def choose_move(self, ai):
         random.shuffle(ai.available_moves)

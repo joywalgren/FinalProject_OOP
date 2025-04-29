@@ -15,7 +15,7 @@ class Player():
     @staticmethod
     def get_name() -> str:
         '''Get and save the name from the player'''
-        name = input("Hello! Welcome to our Battleship Game! What is your name? ")
+        name = input("Hello! Welcome to our Battleship Game! What is your name?")
         print("Hello ", name, "! Are you ready to play?")
         return name
 

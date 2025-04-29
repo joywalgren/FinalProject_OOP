@@ -1,5 +1,5 @@
 """Game
-Author: Joy Walgren
+Primary Author: Joy Walgren
 Date: 4/24/2025
 The manager class for battleship
 using the singleton pattern.
@@ -12,7 +12,11 @@ from menu import Menu
 from dumb_strategy import DumbStrategy
 from smart_strategy import TargetedStrategy
 from opponent import AIPlayer
-from attack import Attack
+# decorator imports
+from attack import BasicAttack
+from attack_validation import ValidationAttack
+from attack_logging import LoggingAttack
+from attack_stats import StatsAttack
 
 
 class Main(object):
@@ -27,8 +31,9 @@ class Main(object):
         self._top_board = Board()
         self._bottom_board = Board()
         self._player = Player()
+        self._difficulty: str = ''
 
-    def read_input(self) -> tuple:
+    def read_input(self) -> tuple[int, int]:
         """
         reads the input from the user
         """
@@ -36,10 +41,10 @@ class Main(object):
             try:
                 user_input = input(
                     "Enter a letter (A-J) and a number (1-10) separated by a space:\n"
-                    ).strip()
-                x, y = user_input.split()
-                x = ord(x.upper()) - ord('A')
-                y = int(y) - 1
+                ).strip()
+                x_str, y_str = user_input.split()
+                x = ord(x_str.upper()) - ord('A')
+                y = int(y_str) - 1
 
                 if 0 <= x < 10 and 0 <= y < 10:
                     return x, y  # Valid input
@@ -57,28 +62,33 @@ class Main(object):
             print("Your Bottom Board (Ships):")
             self._bottom_board.print_board()
             x, y = self.read_input()
-            try:
-                attack = Attack(x, y)
-                result = attack.execute(ai.bottom_board)
-                print(result)
 
-                if result in ["Hit!", "You sank a ship!"]:
-                    self._top_board._board[y][x].set_cell('H')
-                    if ai.bottom_board.check_endgame():
-                        break
-                    continue
-                elif result == "Miss!":
-                    self._top_board._board[y][x].set_cell('M')
+            # Build decorator chain
+            attack_obj = ValidationAttack(
+                StatsAttack(
+                    LoggingAttack(
+                        BasicAttack(x, y)
+                    )
+                )
+            )
+            result = attack_obj.execute(ai.bottom_board)
 
-                if result == "Miss!":
-                    return False  # set player turn to false
-                elif result == "Already Attacked":
-                    print("You already tried that spot. Try again.")
-                    continue  # go back to input without breaking the loop
+            # Update top board view
+            if result in ["Hit!", "You sank a ship!"]:
+                self._top_board._board[y][x].set_cell('H')
+                if ai.bottom_board.check_endgame():
+                    return True  # Game over
+                continue  # Allow another attack on hit
 
-                break  # exit input loop if valid attack
-            except ValueError as e:
-                print(e)
+            if result == "Miss!":
+                self._top_board._board[y][x].set_cell('M')
+                return False  # switch to AI turn
+
+            if result in ["Already Attacked", "Invalid: Repeat Attack"]:
+                print("You already tried that spot. Try again.")
+                continue
+
+            return False  # Default return if no other condition is met
 
     def ai_turn(self, ai: AIPlayer) -> bool:
         """Handles the ai's turn"""
@@ -89,34 +99,36 @@ class Main(object):
             if not hit:
                 return True  # Turns player turn to true
 
-    def loop(self):
+    def loop(self) -> None:
         """The main game loop"""
+        # New boards
+        self._top_board = Board()
+        self._bottom_board = Board()
+        self._bottom_board.place_ships()
+
+        # The main game loop
         if self._difficulty == 'h':
             ai = AIPlayer(TargetedStrategy())
         else:
             ai = AIPlayer(DumbStrategy())
-
-        # placeships
-        ai.bottom_board.print_board()
-        self._bottom_board.place_ships()
 
         player_turn = True
 
         while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
             if player_turn:
                 player_turn = self.player_turn(ai)
-
             else:
                 player_turn = self.ai_turn(ai)
 
         if ai.bottom_board.check_endgame():
             print("You win!")
             self._player.update_player_stats(1, 0)  # Add 1 win
-            return
         else:
             print("You lose :(")
             self._player.update_player_stats(0, 1)  # Add 1 loss
-            return
+
+        # Display stats and log summary
+        StatsAttack.report()
 
     @classmethod
     def get_instance(cls) -> Main:
@@ -139,18 +151,24 @@ class Main(object):
     def main() -> None:
         """Main static method."""
         manager = Main.get_instance()
+
+        open("data.txt", "w").close()
+
         while True:
             option = Menu.menu()
             if option == 1:
                 manager._difficulty = Player.get_difficulty()
-                manager._bottom_board.clean_board()
-                manager._top_board.clean_board()
+
                 manager.loop()
                 again = input("Play again? (y/n): ")
                 if again.lower() != 'y':
                     break
-            else:
+            elif option == 2:
                 manager._player.display_player_stats()  # Display the player's stats
+                input("\nPress Enter to return to menu…")
+            elif option == 3:
+                break
+            else:
                 break
         # save data to file before exiting
         manager._player.save_dict_to_file("data.txt", manager._player._data_dict)
