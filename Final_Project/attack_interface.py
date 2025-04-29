@@ -5,6 +5,7 @@ The class that executes attack and prints out everything happening."""
 
 from abc import ABC, abstractmethod
 
+
 class AttackStrategy(ABC):
     @abstractmethod
     def execute(self, board) -> str:

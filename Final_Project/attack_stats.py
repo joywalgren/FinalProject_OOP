@@ -5,6 +5,7 @@ The class that handles used to handle outcomes of guess ie. hit, miss, repeat.""
 
 from attack_decorator import AttackDecorator
 
+
 class StatsAttack(AttackDecorator):
     """Keeps track of your hits, misses, and repeats over the whole program"""
     hits = 0
@@ -27,4 +28,8 @@ class StatsAttack(AttackDecorator):
     @staticmethod
     def report():
         """Print the stats"""
-        print(f"Stats → Hits: {StatsAttack.hits}, Misses: {StatsAttack.misses}, Repeats: {StatsAttack.repeats}")
+        print(
+            f"Stats → Hits: {StatsAttack.hits}, "
+            f"Misses: {StatsAttack.misses}, "
+            f"Repeats: {StatsAttack.repeats}"
+        )

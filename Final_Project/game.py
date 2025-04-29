@@ -31,8 +31,9 @@ class Main(object):
         self._top_board = Board()
         self._bottom_board = Board()
         self._player = Player()
+        self._difficulty: str = ''
 
-    def read_input(self) -> tuple:
+    def read_input(self) -> tuple[int, int]:
         """
         reads the input from the user
         """
@@ -40,10 +41,10 @@ class Main(object):
             try:
                 user_input = input(
                     "Enter a letter (A-J) and a number (1-10) separated by a space:\n"
-                    ).strip()
-                x, y = user_input.split()
-                x = ord(x.upper()) - ord('A')
-                y = int(y) - 1
+                ).strip()
+                x_str, y_str = user_input.split()
+                x = ord(x_str.upper()) - ord('A')
+                y = int(y_str) - 1
 
                 if 0 <= x < 10 and 0 <= y < 10:
                     return x, y  # Valid input
@@ -71,14 +72,13 @@ class Main(object):
                 )
             )
             result = attack_obj.execute(ai.bottom_board)
-            #print(result)
 
             # Update top board view
             if result in ["Hit!", "You sank a ship!"]:
                 self._top_board._board[y][x].set_cell('H')
                 if ai.bottom_board.check_endgame():
-                    break
-                continue  # allow another attack on hit
+                    return True  # Game over
+                continue  # Allow another attack on hit
 
             if result == "Miss!":
                 self._top_board._board[y][x].set_cell('M')
@@ -88,7 +88,7 @@ class Main(object):
                 print("You already tried that spot. Try again.")
                 continue
 
-            break
+            return False  # Default return if no other condition is met
 
     def ai_turn(self, ai: AIPlayer) -> bool:
         """Handles the ai's turn"""
@@ -99,13 +99,14 @@ class Main(object):
             if not hit:
                 return True  # Turns player turn to true
 
-    def loop(self):
-        #new boards
-        self._top_board    = Board()
+    def loop(self) -> None:
+        """The main game loop"""
+        # New boards
+        self._top_board = Board()
         self._bottom_board = Board()
         self._bottom_board.place_ships()
 
-        """The main game loop"""
+        # The main game loop
         if self._difficulty == 'h':
             ai = AIPlayer(TargetedStrategy())
         else:
@@ -113,7 +114,7 @@ class Main(object):
 
         player_turn = True
 
-        while (not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame()):
+        while not self._bottom_board.check_endgame() and not ai.bottom_board.check_endgame():
             if player_turn:
                 player_turn = self.player_turn(ai)
             else:
@@ -122,11 +123,11 @@ class Main(object):
         if ai.bottom_board.check_endgame():
             print("You win!")
             self._player.update_player_stats(1, 0)  # Add 1 win
-        
         else:
             print("You lose :(")
             self._player.update_player_stats(0, 1)  # Add 1 loss
-        # display stats and log summary
+
+        # Display stats and log summary
         StatsAttack.report()
 
     @classmethod
@@ -167,7 +168,7 @@ class Main(object):
                 input("\nPress Enter to return to menu…")
             elif option == 3:
                 break
-            else: 
+            else:
                 break
         # save data to file before exiting
         manager._player.save_dict_to_file("data.txt", manager._player._data_dict)

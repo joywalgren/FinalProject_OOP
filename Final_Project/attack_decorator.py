@@ -6,6 +6,7 @@ The class that used to decorate original attack class
 
 from attack_interface import AttackStrategy
 
+
 class AttackDecorator(AttackStrategy):
     def __init__(self, wrapped: AttackStrategy):
         self._wrapped = wrapped

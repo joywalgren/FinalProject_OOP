@@ -1,12 +1,14 @@
-"""Attack 
+"""Attack
 Author: Mykaela Moore
 Date: 4/28/2025
 Original attack file. Logic is built here."""
 
 from attack_interface import AttackStrategy
 
+
 class BasicAttack(AttackStrategy):
     """Attack that player and ai will use"""
+
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
@@ -17,7 +19,7 @@ class BasicAttack(AttackStrategy):
         current = cell.get_cell()
         if current in ("H", "M"):
             return "Already Attacked"
-        
+
         if cell.has_ship():
             cell.hit()
             ship = cell._ship
@@ -26,5 +28,5 @@ class BasicAttack(AttackStrategy):
             else:
                 return "Hit!"
         else:
-                cell.hit()
-                return "Miss!"
+            cell.hit()
+            return "Miss!"

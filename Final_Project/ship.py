@@ -1,4 +1,4 @@
-"""Attack 
+"""Attack
 Author: Mykaela Moore
 Date: 4/28/2025
 Ship logic and attributes. """
@@ -20,7 +20,7 @@ class Ship:
         self.symbol = Ship._color_cycle[Ship._color_index % len(Ship._color_cycle)]
         Ship._color_index += 1
 
-    def is_hit(self):
+    def is_hit(self) -> bool:
         """Registers a hit on the ship"""
         self.hits += 1
         return self.is_sunk()

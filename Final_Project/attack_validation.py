@@ -5,8 +5,10 @@ The class that handles used to check if cell has been attacked or not."""
 
 from attack_decorator import AttackDecorator
 
+
 class ValidationAttack(AttackDecorator):
     """Double checks the cell has been attacked already"""
+
     def execute(self, board) -> str:
         wrapped = self._wrapped
         x = getattr(wrapped, 'x', None)

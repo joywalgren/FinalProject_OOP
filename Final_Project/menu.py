@@ -10,4 +10,3 @@ class Menu():
                     print("Invalid option. Please enter valid input.")
             except ValueError:
                 print("Invalid input. Please enter a number valid input.")
-    

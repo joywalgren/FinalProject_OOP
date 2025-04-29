@@ -4,10 +4,11 @@ The main class for the AI opponent
 
 from board import Board
 # New attack system:
-from attack      import BasicAttack
+from attack import BasicAttack
 from attack_validation import ValidationAttack
-from attack_logging    import LoggingAttack
-from attack_stats     import StatsAttack
+from attack_logging import LoggingAttack
+from attack_stats import StatsAttack
+
 
 class AIPlayer:
     def __init__(self, strategy):
@@ -38,12 +39,12 @@ class AIPlayer:
 
         # --- build the decorator chain for this shot ---
         attack = ValidationAttack(
-                    StatsAttack(
-                      LoggingAttack(
-                        BasicAttack(x, y)
-                      )
-                    )
-                 )
+            StatsAttack(
+                LoggingAttack(
+                    BasicAttack(x, y)
+                )
+            )
+        )
 
         result = attack.execute(player_board)
         print("AI result:", result)
@@ -55,7 +56,7 @@ class AIPlayer:
         # Let the strategy react
         self.strategy.handle_result(self, move, result)
         return result in ["Hit!", "AI sank a ship!"]
-    
+
     def reset(self):
         # wipe and re-place ships on both boards
         self.top_board.clean_board()
@@ -64,5 +65,5 @@ class AIPlayer:
 
         # reset your move trackers
         self.available_moves = [(x, y) for x in range(10) for y in range(10)]
-        self.tried           = set()
-        self.target_stack    = []
+        self.tried = set()
+        self.target_stack = []

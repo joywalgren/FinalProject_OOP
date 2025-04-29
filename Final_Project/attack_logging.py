@@ -5,6 +5,8 @@ The class that handles used to handle record of attacks."""
 
 from attack_decorator import AttackDecorator
 """This is what keeps track of where players are attacking. Prints out the action of the turn."""
+
+
 class LoggingAttack(AttackDecorator):
     def execute(self, board) -> str:
         result = super().execute(board)
