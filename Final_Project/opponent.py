@@ -9,22 +9,26 @@ from attack import BasicAttack
 from attack_validation import ValidationAttack
 from attack_logging import LoggingAttack
 from attack_stats import StatsAttack
+from ai_strategy import AIStrategy
+
+from typing import List, Set, Tuple, Optional
 
 
 class AIPlayer:
-    def __init__(self, strategy):
-        self.top_board = Board()
-        self.bottom_board = Board()
+    def __init__(self, strategy: AIStrategy) -> None:
+        self.top_board: Board = Board()
+        self.bottom_board: Board = Board()
         self.bottom_board.place_ships()
-        self.available_moves = [(x, y) for x in range(10) for y in range(10)]
-        self.target_stack = []
-        self.tried = set()
-        self.strategy = strategy
+        
+        self.available_moves: List[Tuple[int, int]] = [(x, y) for x in range(10) for y in range(10)]
+        self.target_stack: List[Tuple[int, int]] = []
+        self.tried: Set[Tuple[int, int]]  = set()
+        self.strategy: AIStrategy = strategy
 
-    def choose_move(self):
+    def choose_move(self) -> Optional[Tuple[int, int]]:
         return self.strategy.choose_move(self)
 
-    def attack_player(self, player_board):
+    def attack_player(self, player_board: Board) -> bool:
         move = self.choose_move()
         if move is None:
             print("AI has no moves left.")
@@ -47,7 +51,7 @@ class AIPlayer:
             )
         )
 
-        result = attack.execute(player_board)
+        result: str = attack.execute(player_board)
         print("AI result:", result)
 
         # --- update AI’s view of your board ---
@@ -58,7 +62,7 @@ class AIPlayer:
         self.strategy.handle_result(self, move, result)
         return result in ["Hit!", "AI sank a ship!"]
 
-    def reset(self):
+    def reset(self) -> None:
         # wipe and re-place ships on both boards
         self.top_board.clean_board()
         self.bottom_board.clean_board()
