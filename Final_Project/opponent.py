@@ -15,7 +15,11 @@ from typing import List, Set, Tuple, Optional
 
 
 class AIPlayer:
+    '''Represents the AI opponent in the Battleship game. This class handles the AI's board,
+    move selection, attacks, and interaction with the game's strategy system'''
+
     def __init__(self, strategy: AIStrategy) -> None:
+        '''Initializes the AI player with a specified strategy and sets up the game boards'''
         self.top_board: Board = Board()
         self.bottom_board: Board = Board()
         self.bottom_board.place_ships()
@@ -26,9 +30,11 @@ class AIPlayer:
         self.strategy: AIStrategy = strategy
 
     def choose_move(self) -> Optional[Tuple[int, int]]:
+        '''Chooses the next move based on the AI's current strategy'''
         return self.strategy.choose_move(self)
 
     def attack_player(self, player_board: Board) -> bool:
+        '''Executes an attack on the player's board based on the AI's chosen move'''
         move = self.choose_move()
         if move is None:
             print("AI has no moves left.")
@@ -63,7 +69,7 @@ class AIPlayer:
         return result in ["Hit!", "AI sank a ship!"]
 
     def reset(self) -> None:
-        # wipe and re-place ships on both boards
+        '''Resets the AI player by cleaning the boards and re-placing ships'''
         self.top_board.clean_board()
         self.bottom_board.clean_board()
         self.bottom_board.place_ships()
