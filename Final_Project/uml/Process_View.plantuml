@@ -1,11 +1,43 @@
 @startuml Process_View
 actor Player
-participant Game
+participant Main
+participant Player
 participant Board
+participant AIPlayer
+participant Cell
+participant Ship
 
-Player -> Game: startGame()
-Game -> Board: placeShips()
-Player -> Game: attack(x, y)
-Game -> Board: receiveAttack(x, y)
-Board -> Player: hit/miss
+Player -> Main: startGame()
+Main -> Player: getName()
+Player --> Main: playerName
+Main -> Board: placeShips()
+Board -> Cell: placeShip(ship)
+Cell -> Ship: setShip()
+
+Player -> Main: attack(x, y)
+Main -> Board: receiveAttack(x, y)
+Board -> Cell: hit()
+Cell -> Ship: isHit()
+Ship -> Cell: updateState()
+Cell -> Board: return hit/miss
+Board -> Main: hit/miss
+Main -> Player: displayResult()
+
+Main -> AIPlayer: aiTurn()
+AIPlayer -> Board: attackPlayer()
+Board -> Cell: hit()
+Cell -> Ship: isHit()
+Ship -> Cell: updateState()
+Cell -> Board: return hit/miss
+Board -> AIPlayer: hit/miss
+AIPlayer -> Main: return result
+Main -> Player: displayAIResult()
+
+Player -> Main: checkEndGame()
+Main -> Board: checkEndGame()
+Board -> Ship: isSunk()
+Ship --> Board: return status
+Board --> Main: return status
+Main -> Player: displayEndGameResult()
+
 @enduml
