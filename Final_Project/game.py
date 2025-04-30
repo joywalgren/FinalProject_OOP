@@ -30,14 +30,13 @@ class Main(object):
         Main._instance = self
         self._top_board = Board()
         self._bottom_board = Board()
-        self._player = None
+        self._player = Player()
         self._difficulty: str = ''
 
     def read_input(self) -> tuple[int, int]:
         """
         reads the input from the user
         """
-        #self._player = Player()
         while True:
             try:
                 user_input = input(
@@ -158,7 +157,6 @@ class Main(object):
         while True:
             option = Menu.menu()
             if option == 1:
-                manager._player = Player()
                 manager._difficulty = Player.get_difficulty()
 
                 manager.loop()
@@ -177,4 +175,4 @@ class Main(object):
 
 
 if __name__ == "__main__":
-    Main.main() #no pragma
+    Main.main()  # no pragma

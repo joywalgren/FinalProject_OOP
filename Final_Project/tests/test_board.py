@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from board import Board
 from cell import Cell
-from ship import Ship
+
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
@@ -81,5 +81,6 @@ class TestBoard(unittest.TestCase):
         self.assertTrue(lines[0].startswith("    A B C D E F G H I J"))
         self.assertTrue(lines[1].startswith("   -----"))
 
+
 if __name__ == '__main__':
-    unittest.main() #no pragma
+    unittest.main()  # no pragma
