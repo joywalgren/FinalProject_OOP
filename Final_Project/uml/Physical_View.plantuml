@@ -8,6 +8,6 @@ node "Local Machine" {
 }
 
 UI --> "Game Logic"
-"Game Logic" --> "AI Logic"
+"Game Logic" <-- "AI Logic"
 
 @enduml

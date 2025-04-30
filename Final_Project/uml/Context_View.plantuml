@@ -1,13 +1,10 @@
-@startuml Context_View
+@startuml
 actor Player
-actor AI 
 
-node "Game"{
-    component "Attack"
-    component "Logic"
-}
+rectangle "Command Line Interface (CLI)" as CLI
+rectangle "Battleship Game System" as Game
 
+Player --> CLI : inputs/reads commands
+CLI --> Game : passes commands/data
 
-Player --> "Attack"
-AI --> "Attack"
 @enduml

@@ -1,10 +1,16 @@
 @startuml Development_View
 package "Battleship Game" {
-    [Game] --> [Player]
-    [Game] --> [AI]
-    [Player] --> [Board]
-    [Player] <-- [AI]
-    [Board] --> [Cell]
-    [Board] --> [Ship]
+    [game.py] --> [player.py]
+    [game.py] --> [opponent.py]
+    [game.py] --> [board.py]
+    [board.py] --> [cell.py]
+    [board.py] --> [ship.py]
+    [opponent.py] --> [ai_strategy.py]
+    [opponent.py] --> [dumb_strategy.py]
+    [opponent.py] --> [smart_strategy.py]
+    [opponent.py] --> [attack.py]
+    [attack.py] --> [attack_validation.py]
+    [attack.py] --> [attack_logging.py]
+    [attack.py] --> [attack_stats.py]
 }
 @enduml
