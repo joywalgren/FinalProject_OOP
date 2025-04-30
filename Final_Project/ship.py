@@ -14,7 +14,9 @@ class Ship:
         '\033[95mS\033[0m']
     _color_index = 0
 
-    def __init__(self, size):
+    def __init__(self, size: int) -> None:
+        """setting up the ships and initaling size & color
+        """
         self.size = size
         self.hits = 0
         self.symbol = Ship._color_cycle[Ship._color_index % len(Ship._color_cycle)]
@@ -29,7 +31,7 @@ class Ship:
         """Returns the size of the ship"""
         return self.size
 
-    def is_sunk(self):
+    def is_sunk(self) -> bool:
         """Checks if the ship is sunk"""
         return self.hits >= self.size
 

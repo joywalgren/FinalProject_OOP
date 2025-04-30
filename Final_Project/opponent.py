@@ -19,10 +19,10 @@ class AIPlayer:
         self.top_board: Board = Board()
         self.bottom_board: Board = Board()
         self.bottom_board.place_ships()
-        
+
         self.available_moves: List[Tuple[int, int]] = [(x, y) for x in range(10) for y in range(10)]
         self.target_stack: List[Tuple[int, int]] = []
-        self.tried: Set[Tuple[int, int]]  = set()
+        self.tried: Set[Tuple[int, int]] = set()
         self.strategy: AIStrategy = strategy
 
     def choose_move(self) -> Optional[Tuple[int, int]]:

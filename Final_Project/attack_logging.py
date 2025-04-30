@@ -4,11 +4,17 @@ Date: 4/28/2025
 The class that handles used to handle record of attacks."""
 
 from attack_decorator import AttackDecorator
-"""This is what keeps track of where players are attacking. Prints out the action of the turn."""
+from board import Board  # import your board type
+
 
 
 class LoggingAttack(AttackDecorator):
-    def execute(self, board) -> str:
+    """This is what keeps track of where players are attacking. 
+    Prints out the action of the turn.
+    """
+    def execute(self, board: Board) -> str:
+        """Perform the actual attack via the wrapped strategy
+        """
         result = super().execute(board)
         x = getattr(self._wrapped, 'x', None)
         y = getattr(self._wrapped, 'y', None)
