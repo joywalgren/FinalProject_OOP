@@ -1,6 +1,8 @@
 class Menu():
     @staticmethod
     def menu() -> int:
+        '''Simple menu function that let's the user choose to play the
+        game, see the log file, or quit'''
         while True:
             try:
                 option = int(input("Battleship\n1) Play game\n2) See file log\n3) Quit\n"))
