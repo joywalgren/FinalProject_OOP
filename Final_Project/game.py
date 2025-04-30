@@ -99,7 +99,7 @@ class Main(object):
             if not hit:
                 return True  # Turns player turn to true
 
-    def loop(self) -> None:
+    def loop(self, reveal_ai_board: bool = False) -> None:
         """The main game loop"""
         # New boards
         self._top_board = Board()
@@ -111,6 +111,10 @@ class Main(object):
             ai = AIPlayer(TargetedStrategy())
         else:
             ai = AIPlayer(DumbStrategy())
+
+        if reveal_ai_board:
+            print("\n--- DEMO: AI's Bottom Board (Ship Positions) ---")
+            ai.bottom_board.print_board()
 
         player_turn = True
 
@@ -159,7 +163,7 @@ class Main(object):
             if option == 1:
                 manager._difficulty = Player.get_difficulty()
 
-                manager.loop()
+                manager.loop(reveal_ai_board=False)
                 again = input("Play again? (y/n): ")
                 if again.lower() != 'y':
                     break
@@ -167,6 +171,10 @@ class Main(object):
                 manager._player.display_player_stats()  # Display the player's stats
                 input("\nPress Enter to return to menu…")
             elif option == 3:
+                manager._difficulty = Player.get_difficulty()
+                
+                manager.loop(reveal_ai_board=True)
+            elif option == 4:
                 break
             else:
                 break
