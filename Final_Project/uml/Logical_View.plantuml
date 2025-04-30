@@ -1,43 +1,69 @@
 @startuml Logical_View
 class Cell {
-    - hasShip: bool
-    - isHit: bool
-    - grid: tuple[int, int]
+    - _x: int
+    - _y: int
+    - _cell: str
+    - _ship: Ship
+    + get_cell(): str
+    + set_cell(marker: str): None
+    + place_ship(ship: Ship): None
+    + hit(): bool
 }
 
 class Ship {
     - size: int
     - hits: int
-    + isSunk(): bool
+    - symbol: str
+    + is_hit(): bool
+    + is_sunk(): bool
+    + get_symbol(): str
 }
 
 class Board {
-    - grid: Cell[][]
-    + printBoard(): void
-    + placeShip(ship: Ship, x: int, y: int, horizontal: bool): bool
-    + receiveAttack(x: int, y: int): bool
+    - _board: list[list[Cell]]
+    - _ships: list[Ship]
+    + place_ships(): None
+    + attack(x: int, y: int): bool
+    + ship_space_free(length: int, orient: int, loc_fit: int, loc: int): bool
 }
 
 class Player {
-    - profile: dict
-    - board: Board
-    + attack(x: int, y: int): bool
+    - _name: str
+    - _data_dict: dict[str, list[int]]
+    + get_name(): str
+    + update_player_stats(wins: int, losses: int): None
+    + save_dict_to_file(file_path: str, data: dict[str, list[int]]): None
 }
 
-class AI {
-    + attackLogic(): tuple[int, int]
+class AIPlayer {
+    - strategy: AIStrategy
+    + attack_player(board: Board): bool
 }
 
-class Game {
-    + startGame(): void
-    + endGame(): void
-    + checkWin(): bool
+interface AIStrategy {
+    + choose_move(ai: AIPlayer): tuple[int, int]
 }
 
-AI --|> Player
-Board *-- Cell
-Board *-- Ship
-Player *-- Board
-Game *-- Player
-Game *-- AI
+class DumbStrategy
+class TargetedStrategy
+
+class Main {
+    - _player: Player
+    - _top_board: Board
+    - _bottom_board: Board
+    - _difficulty: str
+    + read_input(): tuple[int, int]
+    + loop(): None
+    + main(): None
+}
+
+AIStrategy <|.. DumbStrategy
+AIStrategy <|.. TargetedStrategy
+AIPlayer --> AIStrategy
+Main --> Player
+Main --> Board
+Main --> AIPlayer
+Board --> Cell
+Board --> Ship
+Cell --> Ship
 @enduml
