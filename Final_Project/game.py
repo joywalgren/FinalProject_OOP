@@ -55,7 +55,7 @@ class Main(object):
 
     def player_turn(self, ai: AIPlayer) -> bool:
         """Handles all the interactions with the player on their turn"""
-        print("\n--- Your Turn ---")
+        print("\n\033[94m--- Your Turn ---\033[0m")
         while True:
             print("Your Top Board:")
             self._top_board.print_board()
@@ -92,7 +92,7 @@ class Main(object):
 
     def ai_turn(self, ai: AIPlayer) -> bool:
         """Handles the ai's turn"""
-        print("\n--- AI's Turn ---")
+        print("\n\033[91m--- AI's Turn ---\033[0m")
         while True:
             hit = ai.attack_player(self._bottom_board)
 
