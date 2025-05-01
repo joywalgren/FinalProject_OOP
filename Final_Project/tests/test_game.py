@@ -8,7 +8,8 @@ class TestMain(unittest.TestCase):
         # Ensure singleton is reset between tests
         Main.reset_instance()
 
-    def test_singleton_behavior(self):
+    @patch('builtins.input', return_value='Tester')
+    def test_singleton_behavior(self, mock_value):
         """get_instance returns the same object, direct __init__ twice raises NameError."""
         inst1 = Main.get_instance()
         inst2 = Main.get_instance()
@@ -17,7 +18,8 @@ class TestMain(unittest.TestCase):
         with self.assertRaises(NameError):
             Main()
 
-    def test_reset_instance_creates_new(self):
+    @patch('builtins.input', side_effect=['Tester','Tester'])
+    def test_reset_instance_creates_new(self, mock_input):
         """reset_instance allows a fresh instance on next get_instance."""
         inst1 = Main.get_instance()
         Main.reset_instance()
@@ -25,7 +27,7 @@ class TestMain(unittest.TestCase):
         self.assertIsNot(inst1, inst2)
         self.assertIsInstance(inst2, Main)
 
-    @patch('builtins.input', side_effect=['A 1'])
+    @patch('builtins.input', side_effect=['name prompt', 'A 1'])
     def test_read_input_valid(self, mock_input):
         """read_input parses valid coordinate correctly."""
         m = Main.get_instance()
