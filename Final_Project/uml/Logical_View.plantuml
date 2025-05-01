@@ -1,4 +1,5 @@
-@startuml Logical_View
+@startuml Logical_View 
+
 class Cell {
     - _x: int
     - _y: int
@@ -8,6 +9,7 @@ class Cell {
     + set_cell(marker: str): None
     + place_ship(ship: Ship): None
     + hit(): bool
+    + has_ship(): bool
 }
 
 class Ship {
@@ -23,7 +25,6 @@ class Board {
     - _board: list[list[Cell]]
     - _ships: list[Ship]
     + place_ships(): None
-    + attack(x: int, y: int): bool
     + ship_space_free(length: int, orient: int, loc_fit: int, loc: int): bool
 }
 
@@ -57,6 +58,13 @@ class Main {
     + main(): None
 }
 
+
+class BasicAttack {
+    - x: int
+    - y: int
+    + execute(board: Board): str
+}
+
 AIStrategy <|.. DumbStrategy
 AIStrategy <|.. TargetedStrategy
 AIPlayer --> AIStrategy
@@ -66,4 +74,6 @@ Main --> AIPlayer
 Board --> Cell
 Board --> Ship
 Cell --> Ship
+BasicAttack --> Board
+
 @enduml
