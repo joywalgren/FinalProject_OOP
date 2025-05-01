@@ -7,9 +7,8 @@ from attack_decorator import AttackDecorator
 from board import Board  # import your board type
 
 
-
 class LoggingAttack(AttackDecorator):
-    """This is what keeps track of where players are attacking. 
+    """This is what keeps track of where players are attacking.
     Prints out the action of the turn.
     """
     def execute(self, board: Board) -> str:

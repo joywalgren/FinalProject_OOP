@@ -94,7 +94,6 @@ class TestBoard(unittest.TestCase):
                 self.assertEqual(cell.get_cell(), "~")
                 self.assertFalse(cell.has_ship())
 
-
     def test_print_board_output(self):
         """print_board outputs header, rows, and footer."""
         captured = io.StringIO()
@@ -109,7 +108,3 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(len(lines), 13)
         self.assertTrue(lines[0].startswith("    A B C D E F G H I J"))
         self.assertTrue(lines[1].startswith("   -----"))
-
-
-if __name__ == '__main__':
-    unittest.main()  # no pragma

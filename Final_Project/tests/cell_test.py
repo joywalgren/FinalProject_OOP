@@ -89,7 +89,3 @@ class TestCell(unittest.TestCase):
         self.assertFalse(result)
         self.assertFalse(ship.hit_called)
         self.assertEqual(cell.get_cell(), 'H')
-
-
-if __name__ == '__main__':
-    unittest.main() #no pragma

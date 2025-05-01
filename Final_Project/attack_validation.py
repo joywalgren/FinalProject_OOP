@@ -7,13 +7,12 @@ from attack_decorator import AttackDecorator
 from board import Board  # import your board type
 
 
-
 class ValidationAttack(AttackDecorator):
     """Double checks the cell has been attacked already"""
 
     def execute(self, board: Board) -> str:
-        """Checking to see if desired attack position has 
-        already been attacked and returning result"""
+        """Checking to see if desired attack position has
+            already been attacked and returning result"""
         wrapped = self._wrapped
         x = getattr(wrapped, 'x', None)
         y = getattr(wrapped, 'y', None)

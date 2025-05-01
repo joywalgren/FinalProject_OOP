@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from game import Main  # or from game import Main
 
+
 class TestMain(unittest.TestCase):
     def tearDown(self):
         # Ensure singleton is reset between tests
@@ -18,7 +19,7 @@ class TestMain(unittest.TestCase):
         with self.assertRaises(NameError):
             Main()
 
-    @patch('builtins.input', side_effect=['Tester','Tester'])
+    @patch('builtins.input', side_effect=['Tester', 'Tester'])
     def test_reset_instance_creates_new(self, mock_input):
         """reset_instance allows a fresh instance on next get_instance."""
         inst1 = Main.get_instance()
@@ -46,6 +47,3 @@ class TestMain(unittest.TestCase):
         # Expect prints for invalid input format and invalid coordinates
         # mock_print.assert_any_call("Invalid input format.")
         mock_print.assert_any_call("Invalid coordinates.")
-
-if __name__ == '__main__':
-    unittest.main() #no pragma

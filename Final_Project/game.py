@@ -172,7 +172,7 @@ class Main(object):
                 input("\nPress Enter to return to menu…")
             elif option == 3:
                 manager._difficulty = Player.get_difficulty()
-                
+
                 manager.loop(reveal_ai_board=True)
             elif option == 4:
                 break

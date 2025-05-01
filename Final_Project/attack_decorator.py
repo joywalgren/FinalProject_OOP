@@ -8,7 +8,6 @@ from attack_interface import AttackStrategy
 from board import Board  # import your board type
 
 
-
 class AttackDecorator(AttackStrategy):
     """subclassing attackStrategy
     """

@@ -7,7 +7,6 @@ from attack_decorator import AttackDecorator
 from board import Board  # import your board type
 
 
-
 class StatsAttack(AttackDecorator):
     """Keeps track of your hits, misses, and repeats over the whole program"""
     hits = 0
