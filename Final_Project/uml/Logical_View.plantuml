@@ -75,5 +75,5 @@ Board --> Cell
 Board --> Ship
 Cell --> Ship
 BasicAttack --> Board
-
+AIPlayer --> BasicAttack
 @enduml
