@@ -14,14 +14,15 @@ from ship import Ship
 class Board:
     """The class that handles displaying and updating the game board"""
 
-    def __init__(self, size: int = 10) -> None:
+    def __init__(self, size: int = 10, seed: int = 11201) -> None:
         """Set up board class"""
         self._board_size = size
         self._board = [[Cell(x, y) for x in range(self._board_size)]
                        for y in range(self._board_size)]
-        ship_sizes = [5, 4, 3, 3, 2]  # 4, 3, 3, 2
+        ship_sizes = [5, 4, 3]  # 5, 4, 3, 3, 2
         self._ships = [Ship(size) for size in ship_sizes]
         self.clean_board()
+        random.seed(seed)
 
     def place_ships(self) -> None:
         """Randomly places ships"""

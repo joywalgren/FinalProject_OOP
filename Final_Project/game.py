@@ -128,6 +128,7 @@ class Main(object):
             print("You win!")
             self._player.update_player_stats(1, 0)  # Add 1 win
         else:
+            self._bottom_board.print_board()
             print("You lose :(")
             self._player.update_player_stats(0, 1)  # Add 1 loss
 
