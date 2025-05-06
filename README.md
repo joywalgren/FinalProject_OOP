@@ -25,4 +25,4 @@ Battleship OOP
 # Judges’ Average Score
   - 92%
 # Self-Grading
-  - 95% great except only 88% coverage
+  - 95% great except only 87% coverage
