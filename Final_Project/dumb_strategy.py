@@ -14,7 +14,6 @@ class DumbStrategy(AIStrategy):
 
     def choose_move(self, ai: AIPlayer) -> Tuple[int, int]:
         '''Chooses a random move from the available moves that the AI has not yet tried'''
-        random.seed(42)
         random.shuffle(ai.available_moves)
         for move in ai.available_moves:
             if move not in ai.tried:
