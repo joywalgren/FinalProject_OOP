@@ -21,7 +21,7 @@ class AIPlayer:
     def __init__(self, strategy: AIStrategy) -> None:
         '''Initializes the AI player with a specified strategy and sets up the game boards'''
         self.top_board: Board = Board()
-        self.bottom_board: Board = Board(10, 12)
+        self.bottom_board: Board = Board()
         self.bottom_board.place_ships()
 
         self.available_moves: List[Tuple[int, int]] = [(x, y) for x in range(10) for y in range(10)]
